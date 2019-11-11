@@ -16,6 +16,7 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
+	typedef std::string string;
 
 public:
 	MainWindow(QWidget *parent = nullptr);
@@ -43,10 +44,13 @@ private:
 	QProcess* process_polybius;
 	QProcess* process_irene;
 
-	std::string dir_polybius = "C:\\Users\\Ernest\\Documents\\Programming\\Projects\\polybius\\Polybius\\bin\\Release\\";
-	std::string dir_irene = "C:\\Users\\Ernest\\Documents\\Programming\\Projects\\irene\\Irene\\bin\\Release\\";
-	std::string path_polybius = dir_polybius + "Polybius.exe";
-	std::string path_irene = dir_irene + "Irene.exe";
+	const unsigned int lines_buffer = 1024;	// seems like this is default for standard terminals
+	const unsigned int chars_buffer = 80 * lines_buffer;	// standard terminal width
+
+	const string dir_polybius = "C:\\Users\\Ernest\\Documents\\Programming\\Projects\\polybius\\Polybius\\bin\\Release\\";
+	const string dir_irene = "C:\\Users\\Ernest\\Documents\\Programming\\Projects\\irene\\Irene\\bin\\Release\\";
+	const string path_polybius = dir_polybius + "Polybius.exe";
+	const string path_irene = dir_irene + "Irene.exe";
 
 	QPalette dark_palette();
 
