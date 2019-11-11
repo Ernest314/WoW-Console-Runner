@@ -41,6 +41,8 @@ private:
 	std::string path_polybius = dir_polybius + "Polybius.exe";
 	std::string path_irene = dir_irene + "Irene.exe";
 
+	QPalette dark_palette();
+
 	QString get_working_dir(QString path);
 };
 

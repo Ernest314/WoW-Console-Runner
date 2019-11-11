@@ -9,6 +9,10 @@ MainWindow::MainWindow(QWidget *parent)
 	process_irene(new QProcess(parent))
 {
 	QApplication::setStyle(QStyleFactory::create("Fusion"));
+	QPalette palette = dark_palette();
+	QApplication::setPalette(palette);
+	this->setStyleSheet("QToolTip { color: #ffffff; background-color: #353535; border: 1px solid white; }");
+
 	ui->setupUi(this);
 
 	QObject::connect(
@@ -107,6 +111,38 @@ void MainWindow::read_irene()
 		ui->console_irene->setPlainText(buffer + line);
 		// TODO: only keep certain amount of buffer
 	}
+}
+
+QPalette MainWindow::dark_palette()
+{
+	// https://gist.github.com/QuantumCD/6245215
+	QPalette palette;
+
+	palette.setColor(QPalette::Window, QColor(53, 53, 53));
+	palette.setColor(QPalette::WindowText, Qt::white);
+	palette.setColor(QPalette::Base, QColor(25, 25, 25));
+	palette.setColor(QPalette::AlternateBase, QColor(53, 53, 53));
+	palette.setColor(QPalette::ToolTipBase, QColor(206, 206, 206));
+	palette.setColor(QPalette::ToolTipText, QColor(206, 206, 206));
+	palette.setColor(QPalette::PlaceholderText, QColor(130, 130, 130));
+	palette.setColor(QPalette::Text, QColor(206, 206, 206));
+	palette.setColor(QPalette::Button, QColor(53, 53, 53));
+	palette.setColor(QPalette::ButtonText, QColor(206, 206, 206));
+	palette.setColor(QPalette::BrightText, Qt::red);
+
+	palette.setColor(QPalette::Light, QColor(40, 40, 40));
+	palette.setColor(QPalette::Midlight,QColor(45, 45, 45) );
+	palette.setColor(QPalette::Dark, QColor(66, 66, 66));
+	palette.setColor(QPalette::Mid, QColor(60, 60, 60));
+	palette.setColor(QPalette::Shadow, QColor(85, 85, 85));
+
+	palette.setColor(QPalette::Highlight, QColor(42, 130, 218));
+	palette.setColor(QPalette::HighlightedText, QColor(25, 25, 25));
+
+	palette.setColor(QPalette::Link, QColor(42, 130, 218));
+	palette.setColor(QPalette::LinkVisited, QColor(130, 42, 218));
+
+	return palette;
 }
 
 QString MainWindow::get_working_dir(QString path)
