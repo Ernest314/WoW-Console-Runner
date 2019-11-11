@@ -102,10 +102,8 @@ void MainWindow::clear_irene()
 
 void MainWindow::run_polybius()
 {
-	ui->console_polybius->clear();
-	if (process_polybius->program() == nullptr) {
-		process_polybius->close();
-	}
+	stop_polybius();
+	clear_polybius();
 	QString path = ui->lineEdit_exe_polybius->text();
 	process_polybius->setProgram(path);
 	process_polybius->setWorkingDirectory(get_working_dir(path));
@@ -114,15 +112,26 @@ void MainWindow::run_polybius()
 }
 void MainWindow::run_irene()
 {
-	ui->console_irene->clear();
-	if (process_irene->program() == nullptr) {
-		process_irene->close();
-	}
+	stop_irene();
+	clear_irene();
 	QString path = ui->lineEdit_exe_irene->text();
 	process_irene->setProgram(path);
 	process_irene->setWorkingDirectory(get_working_dir(path));
 	process_irene->setReadChannel(QProcess::StandardOutput);
 	process_irene->start();
+}
+
+void MainWindow::stop_polybius()
+{
+	if (process_polybius->program() == nullptr) {
+		process_polybius->close();
+	}
+}
+void MainWindow::stop_irene()
+{
+	if (process_irene->program() == nullptr) {
+		process_irene->close();
+	}
 }
 
 void MainWindow::read_polybius()

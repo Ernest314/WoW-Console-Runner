@@ -30,6 +30,8 @@ private slots:
 	void on_button_clear_irene_clicked()	{ clear_irene(); }
 	void on_button_run_polybius_clicked()	{ run_polybius(); }
 	void on_button_run_irene_clicked()		{ run_irene(); }
+	void on_button_stop_polybius_clicked()	{ stop_polybius(); }
+	void on_button_stop_irene_clicked()		{ stop_irene(); }
 
 	void contextMenu_polybius(const QPoint& pos);
 	void contextMenu_irene(const QPoint& pos);
@@ -39,6 +41,9 @@ private slots:
 
 	void run_polybius();
 	void run_irene();
+
+	void stop_polybius();
+	void stop_irene();
 
 	void read_polybius();
 	void read_irene();

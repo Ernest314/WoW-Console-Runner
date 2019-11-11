@@ -167,7 +167,7 @@
            </font>
           </property>
           <property name="toolTip">
-           <string>Clear console buffer</string>
+           <string>Clear the Polybius console buffer.</string>
           </property>
           <property name="text">
            <string>Clear</string>
@@ -182,10 +182,25 @@
            </font>
           </property>
           <property name="toolTip">
-           <string>Restart Polybius process</string>
+           <string>Restart the Polybius process.</string>
           </property>
           <property name="text">
            <string>Run</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="button_stop_polybius">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string>Terminate the Polybius process.</string>
+          </property>
+          <property name="text">
+           <string>Stop</string>
           </property>
          </widget>
         </item>
@@ -334,7 +349,7 @@
            </font>
           </property>
           <property name="toolTip">
-           <string>Clear console buffer</string>
+           <string>Clear the Irene console buffer.</string>
           </property>
           <property name="text">
            <string>Clear</string>
@@ -349,10 +364,25 @@
            </font>
           </property>
           <property name="toolTip">
-           <string>Restart Irene process</string>
+           <string>Restart the Irene process.</string>
           </property>
           <property name="text">
            <string>Run</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="button_stop_irene">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string>Terminate the Irene process.</string>
+          </property>
+          <property name="text">
+           <string>Stop</string>
           </property>
          </widget>
         </item>
