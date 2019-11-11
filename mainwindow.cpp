@@ -28,6 +28,17 @@ MainWindow::MainWindow(QWidget *parent)
 			&MainWindow::read_irene
 	);
 
+	QObject::connect(
+			ui->console_polybius,
+			&QPlainTextEdit::customContextMenuRequested,
+			this,
+			&MainWindow::contextMenu_polybius);
+	QObject::connect(
+			ui->console_irene,
+			&QPlainTextEdit::customContextMenuRequested,
+			this,
+			&MainWindow::contextMenu_irene);
+
 	ui->lineEdit_exe_polybius->setText(path_polybius.c_str());
 	ui->lineEdit_exe_irene->setText(path_irene.c_str());
 }
@@ -53,7 +64,6 @@ void MainWindow::on_button_exe_polybius_clicked()
 	if (path != nullptr)
 		ui->lineEdit_exe_polybius->setText(path);
 }
-
 void MainWindow::on_button_exe_irene_clicked()
 {
 	QString path =
@@ -67,11 +77,24 @@ void MainWindow::on_button_exe_irene_clicked()
 		ui->lineEdit_exe_irene->setText(path);
 }
 
+void MainWindow::contextMenu_polybius(const QPoint& pos) {
+	QMenu* menu = ui->console_polybius->createStandardContextMenu(pos);
+	menu->addAction("Clea&r", this, &MainWindow::clear_polybius);
+	menu->exec(ui->console_polybius->mapToGlobal(pos));
+	delete menu;
+}
+void MainWindow::contextMenu_irene(const QPoint& pos) {
+	QMenu* menu = ui->console_irene->createStandardContextMenu(pos);
+	menu->addAction("Clea&r", this, &MainWindow::clear_irene);
+	menu->exec(ui->console_irene->mapToGlobal(pos));
+	delete menu;
+}
+
+
 void MainWindow::clear_polybius()
 {
 	ui->console_polybius->setPlainText("");
 }
-
 void MainWindow::clear_irene()
 {
 	ui->console_irene->setPlainText("");
@@ -89,7 +112,6 @@ void MainWindow::run_polybius()
 	process_polybius->setReadChannel(QProcess::StandardOutput);
 	process_polybius->start();
 }
-
 void MainWindow::run_irene()
 {
 	ui->console_irene->clear();

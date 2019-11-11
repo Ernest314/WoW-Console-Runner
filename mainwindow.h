@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <QMainWindow>
+#include <QMenu>
 #include <QProcess>
 #include <QStyleFactory>
 
@@ -29,6 +30,9 @@ private slots:
 	void on_button_clear_irene_clicked()	{ clear_irene(); }
 	void on_button_run_polybius_clicked()	{ run_polybius(); }
 	void on_button_run_irene_clicked()		{ run_irene(); }
+
+	void contextMenu_polybius(const QPoint& pos);
+	void contextMenu_irene(const QPoint& pos);
 
 	void clear_polybius();
 	void clear_irene();
