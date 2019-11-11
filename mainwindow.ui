@@ -50,6 +50,9 @@
           <pointsize>12</pointsize>
          </font>
         </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(30, 30, 30); color: rgb(136, 204, 149);</string>
+        </property>
         <property name="undoRedoEnabled">
          <bool>false</bool>
         </property>
@@ -197,6 +200,9 @@
           <family>Consolas</family>
           <pointsize>12</pointsize>
          </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(30, 30, 30); color: rgb(191, 142, 204);</string>
         </property>
         <property name="undoRedoEnabled">
          <bool>false</bool>
