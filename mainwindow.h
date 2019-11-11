@@ -24,9 +24,16 @@ public:
 private slots:
 	void on_button_exe_polybius_clicked();
 	void on_button_exe_irene_clicked();
+	void on_button_clear_polybius_clicked()	{ clear_polybius(); }
+	void on_button_clear_irene_clicked()	{ clear_irene(); }
+	void on_button_run_polybius_clicked()	{ run_polybius(); }
+	void on_button_run_irene_clicked()		{ run_irene(); }
 
-	void on_button_run_polybius_clicked();
-	void on_button_run_irene_clicked();
+	void clear_polybius();
+	void clear_irene();
+
+	void run_polybius();
+	void run_irene();
 
 	void read_polybius();
 	void read_irene();

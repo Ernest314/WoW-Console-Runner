@@ -157,6 +157,21 @@
          </spacer>
         </item>
         <item>
+         <widget class="QPushButton" name="button_clear_polybius">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string>Clear console buffer</string>
+          </property>
+          <property name="text">
+           <string>Clear</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="button_run_polybius">
           <property name="font">
            <font>
@@ -164,7 +179,7 @@
            </font>
           </property>
           <property name="toolTip">
-           <string>Restart Process</string>
+           <string>Restart Polybius process</string>
           </property>
           <property name="text">
            <string>Run</string>
@@ -306,6 +321,21 @@
          </spacer>
         </item>
         <item>
+         <widget class="QPushButton" name="button_clear_irene">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string>Clear console buffer</string>
+          </property>
+          <property name="text">
+           <string>Clear</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="button_run_irene">
           <property name="font">
            <font>
@@ -313,7 +343,7 @@
            </font>
           </property>
           <property name="toolTip">
-           <string>Restart Process</string>
+           <string>Restart Irene process</string>
           </property>
           <property name="text">
            <string>Run</string>
@@ -340,6 +370,18 @@
    </layout>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>console_polybius</tabstop>
+  <tabstop>lineEdit_exe_polybius</tabstop>
+  <tabstop>button_exe_polybius</tabstop>
+  <tabstop>button_clear_polybius</tabstop>
+  <tabstop>button_run_polybius</tabstop>
+  <tabstop>console_irene</tabstop>
+  <tabstop>lineEdit_exe_irene</tabstop>
+  <tabstop>button_exe_irene</tabstop>
+  <tabstop>button_clear_irene</tabstop>
+  <tabstop>button_run_irene</tabstop>
+ </tabstops>
  <resources>
   <include location="graphics.qrc"/>
  </resources>

@@ -67,7 +67,17 @@ void MainWindow::on_button_exe_irene_clicked()
 		ui->lineEdit_exe_irene->setText(path);
 }
 
-void MainWindow::on_button_run_polybius_clicked()
+void MainWindow::clear_polybius()
+{
+	ui->console_polybius->setPlainText("");
+}
+
+void MainWindow::clear_irene()
+{
+	ui->console_irene->setPlainText("");
+}
+
+void MainWindow::run_polybius()
 {
 	ui->console_polybius->clear();
 	if (process_polybius->program() == nullptr) {
@@ -80,7 +90,7 @@ void MainWindow::on_button_run_polybius_clicked()
 	process_polybius->start();
 }
 
-void MainWindow::on_button_run_irene_clicked()
+void MainWindow::run_irene()
 {
 	ui->console_irene->clear();
 	if (process_irene->program() == nullptr) {
