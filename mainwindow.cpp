@@ -123,13 +123,13 @@ void MainWindow::run_irene()
 
 void MainWindow::stop_polybius()
 {
-	if (process_polybius->program() == nullptr) {
+	if (process_polybius->program() != nullptr) {
 		process_polybius->close();
 	}
 }
 void MainWindow::stop_irene()
 {
-	if (process_irene->program() == nullptr) {
+	if (process_irene->program() != nullptr) {
 		process_irene->close();
 	}
 }
