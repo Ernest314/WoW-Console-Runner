@@ -1,4 +1,4 @@
-# WoW Console Runner ![logo][logo]
+# WoW Console Runner
 
 This is a simple container GUI for the two discord bots running
 on our guild's server. Both of them are C# console apps (written
@@ -26,4 +26,3 @@ more details.
 
 [1]: https://github.com/ErythroGuild/polybius
 [2]: https://github.com/ErythroGuild/irene
-[logo]: https://github.com/ErythroGuild/wow-console-runner/blob/master/icon.png
