@@ -1,14 +1,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <string>
-
 #include <QDebug>
 #include <QFileDialog>
 #include <QMainWindow>
 #include <QMenu>
 #include <QProcess>
 #include <QStyleFactory>
+
+#include <string>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -36,6 +36,9 @@ private slots:
 	void contextMenu_polybius(const QPoint& pos);
 	void contextMenu_irene(const QPoint& pos);
 
+	void set_buttons_polybius(QProcess::ProcessState state);
+	void set_buttons_irene(QProcess::ProcessState state);
+
 	void clear_polybius();
 	void clear_irene();
 
@@ -56,14 +59,13 @@ private:
 	const unsigned int lines_buffer = 1024;	// seems like this is default for standard terminals
 	const unsigned int chars_buffer = 80 * lines_buffer;	// standard terminal width
 
-	const string dir_polybius = "C:\\Users\\Ernest\\Documents\\Programming\\Projects\\polybius\\Polybius\\bin\\Release\\";
-	const string dir_irene = "C:\\Users\\Ernest\\Documents\\Programming\\Projects\\irene\\Irene\\bin\\Release\\";
-	const string path_polybius = dir_polybius + "Polybius.exe";
-	const string path_irene = dir_irene + "Irene.exe";
+	const string path_saved = "paths.txt";
+	string path_polybius = "";
+	string path_irene = "";
 
 	QPalette dark_palette();
 
-	QString get_working_dir(QString path);
+	QString get_dir_of_file(QString path);
 };
 
 #endif // MAINWINDOW_H

@@ -8,37 +8,42 @@ MainWindow::MainWindow(QWidget *parent)
 	process_polybius(new QProcess(parent)),
 	process_irene(new QProcess(parent))
 {
+	// Set application theme (dark theme).
+	// `QAppliction::setStyle` works, `this->setStyle` does not
 	QApplication::setStyle(QStyleFactory::create("Fusion"));
 	QPalette palette = dark_palette();
 	QApplication::setPalette(palette);
 	this->setStyleSheet("QToolTip { color: #ffffff; background-color: #353535; border: 1px solid white; }");
+	// tooltip isn't styled by QPalette
 
 	ui->setupUi(this);
 
+	// Change button state based on if processes are running.
 	QObject::connect(
-			process_polybius,
-			&QProcess::readyReadStandardOutput,
-			this,
-			&MainWindow::read_polybius
-	);
+			process_polybius, &QProcess::stateChanged,
+			this, &MainWindow::set_buttons_polybius);
 	QObject::connect(
-			process_irene,
-			&QProcess::readyReadStandardOutput,
-			this,
-			&MainWindow::read_irene
-	);
+			process_irene, &QProcess::stateChanged,
+			this, &MainWindow::set_buttons_irene);
 
+	// Redirect process output to console widgets.
 	QObject::connect(
-			ui->console_polybius,
-			&QPlainTextEdit::customContextMenuRequested,
-			this,
-			&MainWindow::contextMenu_polybius);
+			process_polybius, &QProcess::readyReadStandardOutput,
+			this, &MainWindow::read_polybius );
 	QObject::connect(
-			ui->console_irene,
-			&QPlainTextEdit::customContextMenuRequested,
-			this,
-			&MainWindow::contextMenu_irene);
+			process_irene, &QProcess::readyReadStandardOutput,
+			this, &MainWindow::read_irene );
 
+	// Grab context menu event on consoles (to add "clear" option).
+	QObject::connect(
+			ui->console_polybius, &QPlainTextEdit::customContextMenuRequested,
+			this, &MainWindow::contextMenu_polybius );
+	QObject::connect(
+			ui->console_irene, &QPlainTextEdit::customContextMenuRequested,
+			this, &MainWindow::contextMenu_irene );
+
+	// Initialize lineEdit text with the paths to their
+	// corresponding .exe files.
 	ui->lineEdit_exe_polybius->setText(path_polybius.c_str());
 	ui->lineEdit_exe_irene->setText(path_irene.c_str());
 }
@@ -59,8 +64,7 @@ void MainWindow::on_button_exe_polybius_clicked()
 				this,
 				"Polybius.exe path",
 				QDir::homePath(),
-				"Executable (*.exe)"
-			);
+				"Executable (*.exe)" );
 	if (path != nullptr)
 		ui->lineEdit_exe_polybius->setText(path);
 }
@@ -71,8 +75,7 @@ void MainWindow::on_button_exe_irene_clicked()
 				this,
 				"Irene.exe path",
 				QDir::homePath(),
-				"Executable (*.exe)"
-			);
+				"Executable (*.exe)" );
 	if (path != nullptr)
 		ui->lineEdit_exe_irene->setText(path);
 }
@@ -90,6 +93,34 @@ void MainWindow::contextMenu_irene(const QPoint& pos) {
 	delete menu;
 }
 
+void MainWindow::set_buttons_polybius(QProcess::ProcessState state)
+{
+	switch (state) {
+	case QProcess::Starting : break;	// don't care about this
+	case QProcess::Running :
+		ui->button_stop_polybius->setEnabled(true);
+		ui->button_run_polybius->setText("Restart");
+		break;
+	case QProcess::NotRunning :
+		ui->button_stop_polybius->setEnabled(false);
+		ui->button_run_polybius->setText("Run");
+		break;
+	}
+}
+void MainWindow::set_buttons_irene(QProcess::ProcessState state)
+{
+	switch (state) {
+	case QProcess::Starting : break;	// don't care about this
+	case QProcess::Running :
+		ui->button_stop_irene->setEnabled(true);
+		ui->button_run_irene->setText("Restart");
+		break;
+	case QProcess::NotRunning :
+		ui->button_stop_irene->setEnabled(false);
+		ui->button_run_irene->setText("Run");
+		break;
+	}
+}
 
 void MainWindow::clear_polybius()
 {
@@ -106,7 +137,7 @@ void MainWindow::run_polybius()
 	clear_polybius();
 	QString path = ui->lineEdit_exe_polybius->text();
 	process_polybius->setProgram(path);
-	process_polybius->setWorkingDirectory(get_working_dir(path));
+	process_polybius->setWorkingDirectory(get_dir_of_file(path));
 	process_polybius->setReadChannel(QProcess::StandardOutput);
 	process_polybius->start();
 }
@@ -116,7 +147,7 @@ void MainWindow::run_irene()
 	clear_irene();
 	QString path = ui->lineEdit_exe_irene->text();
 	process_irene->setProgram(path);
-	process_irene->setWorkingDirectory(get_working_dir(path));
+	process_irene->setWorkingDirectory(get_dir_of_file(path));
 	process_irene->setReadChannel(QProcess::StandardOutput);
 	process_irene->start();
 }
@@ -186,7 +217,7 @@ QPalette MainWindow::dark_palette()
 	return palette;
 }
 
-QString MainWindow::get_working_dir(QString path)
+QString MainWindow::get_dir_of_file(QString path)
 {
 	QDir dir = QDir(path);
 	dir.cdUp();

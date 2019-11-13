@@ -191,6 +191,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="button_stop_polybius">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="font">
            <font>
             <pointsize>12</pointsize>
@@ -373,6 +376,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="button_stop_irene">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="font">
            <font>
             <pointsize>12</pointsize>
