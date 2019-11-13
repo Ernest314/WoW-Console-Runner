@@ -136,6 +136,14 @@ void MainWindow::run_polybius()
 	stop_polybius();
 	clear_polybius();
 	QString path = ui->lineEdit_exe_polybius->text();
+	if (!QFile::exists(path)) {
+		QMessageBox message_error;
+		message_error.setWindowTitle("WoW Console Runner");
+		message_error.setText("There is no valid file at that path.");
+		message_error.setIcon(QMessageBox::Warning);
+		message_error.exec();
+		return;
+	}
 	process_polybius->setProgram(path);
 	process_polybius->setWorkingDirectory(get_dir_of_file(path));
 	process_polybius->setReadChannel(QProcess::StandardOutput);
@@ -146,6 +154,14 @@ void MainWindow::run_irene()
 	stop_irene();
 	clear_irene();
 	QString path = ui->lineEdit_exe_irene->text();
+	if (!QFile::exists(path)) {
+		QMessageBox message_error;
+		message_error.setWindowTitle("WoW Console Runner");
+		message_error.setText("There is no valid file at that path.");
+		message_error.setIcon(QMessageBox::Warning);
+		message_error.exec();
+		return;
+	}
 	process_irene->setProgram(path);
 	process_irene->setWorkingDirectory(get_dir_of_file(path));
 	process_irene->setReadChannel(QProcess::StandardOutput);
