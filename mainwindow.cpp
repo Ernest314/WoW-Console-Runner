@@ -186,8 +186,11 @@ void MainWindow::read_polybius()
 	while (process_polybius->canReadLine()) {
 		QString line = process_polybius->readLine();
 		QString buffer = ui->console_polybius->toPlainText();
+		if (static_cast<unsigned int>(buffer.size()) > chars_buffer) {
+			int cutoff = buffer.indexOf("\n", chars_buffer/2);
+			buffer = buffer.remove(0, cutoff + 1);
+		}
 		ui->console_polybius->setPlainText(buffer + line);
-		// TODO: only keep certain amount of buffer
 	}
 }
 
@@ -196,8 +199,11 @@ void MainWindow::read_irene()
 	while (process_irene->canReadLine()) {
 		QString line = process_irene->readLine();
 		QString buffer = ui->console_irene->toPlainText();
+		if (static_cast<unsigned int>(buffer.size()) > chars_buffer) {
+			int cutoff = buffer.indexOf("\n", chars_buffer/2);
+			buffer = buffer.remove(0, cutoff + 1);
+		}
 		ui->console_irene->setPlainText(buffer + line);
-		// TODO: only keep certain amount of buffer
 	}
 }
 
