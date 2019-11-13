@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent),
 	ui(new Ui::MainWindow),
@@ -44,8 +43,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 	// Initialize lineEdit text with the paths to their
 	// corresponding .exe files.
-	ui->lineEdit_exe_polybius->setText(path_polybius.c_str());
-	ui->lineEdit_exe_irene->setText(path_irene.c_str());
+	ui->lineEdit_exe_polybius->setText(read_path_polybius().c_str());
+	ui->lineEdit_exe_irene->setText(read_path_irene().c_str());
 }
 
 MainWindow::~MainWindow()
@@ -56,6 +55,88 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
+string MainWindow::read_path_polybius()
+{
+	if (!QFile::exists(path_saved_paths.c_str())) {
+		return QDir::homePath().toStdString();
+	}
+	QFile* file = new QFile(path_saved_paths.c_str());
+	file->open(QIODevice::ReadOnly | QIODevice::Text);
+	QString data = file->readAll();
+	QStringList lines = data.split("\n", QString::SkipEmptyParts);
+	string path = "";
+	for (QString line : lines) {
+		if (line.startsWith(prefix_polybius.c_str())) {
+			path = line.remove(prefix_polybius.c_str()).toStdString();
+		}
+	}
+	if (path == "") {
+		path = QDir::homePath().toStdString();
+	}
+	return path;
+}
+string MainWindow::read_path_irene()
+{
+	if (!QFile::exists(path_saved_paths.c_str())) {
+		return QDir::homePath().toStdString();
+	}
+	QFile* file = new QFile(path_saved_paths.c_str());
+	file->open(QIODevice::ReadOnly | QIODevice::Text);
+	QString data = file->readAll().trimmed();
+	QStringList lines = data.split("\n", QString::SkipEmptyParts);
+	string path = "";
+	for (QString line : lines) {
+		if (line.startsWith(prefix_irene.c_str())) {
+			path = line.remove(prefix_irene.c_str()).toStdString();
+		}
+	}
+	if (path == "") {
+		path = QDir::homePath().toStdString();
+	}
+	return path;
+}
+void MainWindow::write_path_polybius(string path)
+{
+	QFile file(path_saved_paths.c_str());
+	file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text);
+	QString data = file.readAll().trimmed();
+	if (!data.contains(prefix_polybius.c_str())) {
+		data += ("\n" + prefix_polybius + path).c_str();
+	}
+	QString data_new = "";
+	QStringList lines = data.split("\n", QString::SkipEmptyParts);
+	for (QString line : lines) {
+		if (line.startsWith(prefix_polybius.c_str())) {
+			line = (prefix_polybius + path).c_str();
+		}
+		data_new += line + "\n";
+	}
+	data_new = data_new.trimmed();
+	QTextStream out(&file);
+	out << data_new;
+	return;
+}
+void MainWindow::write_path_irene(string path)
+{
+	QFile file(path_saved_paths.c_str());
+	file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text);
+	QString data = file.readAll().trimmed();
+	if (!data.contains(prefix_irene.c_str())) {
+		data += ("\n" + prefix_irene + path).c_str();
+	}
+	QString data_new = "";
+	QStringList lines = data.split("\n", QString::SkipEmptyParts);
+	for (QString line : lines) {
+		if (line.startsWith(prefix_irene.c_str())) {
+			line = (prefix_irene + path).c_str();
+		}
+		data_new += line + "\n";
+	}
+	data_new = data_new.trimmed();
+	QTextStream out(&file);
+	out << data_new;
+	return;
+}
 
 void MainWindow::on_button_exe_polybius_clicked()
 {
@@ -136,6 +217,15 @@ void MainWindow::run_polybius()
 	stop_polybius();
 	clear_polybius();
 	QString path = ui->lineEdit_exe_polybius->text();
+	if (!QFile::exists(path) || !path.endsWith(".exe")) {
+		QMessageBox message_error;
+		message_error.setWindowTitle("WoW Console Runner");
+		message_error.setText("There is no valid file at that path.");
+		message_error.setIcon(QMessageBox::Warning);
+		message_error.exec();
+		return;
+	}
+	write_path_polybius(path.toStdString());
 	process_polybius->setProgram(path);
 	process_polybius->setWorkingDirectory(get_dir_of_file(path));
 	process_polybius->setReadChannel(QProcess::StandardOutput);
@@ -146,6 +236,15 @@ void MainWindow::run_irene()
 	stop_irene();
 	clear_irene();
 	QString path = ui->lineEdit_exe_irene->text();
+	if (!QFile::exists(path) || !path.endsWith(".exe")) {
+		QMessageBox message_error;
+		message_error.setWindowTitle("WoW Console Runner");
+		message_error.setText("There is no valid file at that path.");
+		message_error.setIcon(QMessageBox::Warning);
+		message_error.exec();
+		return;
+	}
+	write_path_irene(path.toStdString());
 	process_irene->setProgram(path);
 	process_irene->setWorkingDirectory(get_dir_of_file(path));
 	process_irene->setReadChannel(QProcess::StandardOutput);
@@ -170,8 +269,11 @@ void MainWindow::read_polybius()
 	while (process_polybius->canReadLine()) {
 		QString line = process_polybius->readLine();
 		QString buffer = ui->console_polybius->toPlainText();
+		if (static_cast<unsigned int>(buffer.size()) > chars_buffer) {
+			int cutoff = buffer.indexOf("\n", chars_buffer/2);
+			buffer = buffer.remove(0, cutoff + 1);
+		}
 		ui->console_polybius->setPlainText(buffer + line);
-		// TODO: only keep certain amount of buffer
 	}
 }
 
@@ -180,8 +282,11 @@ void MainWindow::read_irene()
 	while (process_irene->canReadLine()) {
 		QString line = process_irene->readLine();
 		QString buffer = ui->console_irene->toPlainText();
+		if (static_cast<unsigned int>(buffer.size()) > chars_buffer) {
+			int cutoff = buffer.indexOf("\n", chars_buffer/2);
+			buffer = buffer.remove(0, cutoff + 1);
+		}
 		ui->console_irene->setPlainText(buffer + line);
-		// TODO: only keep certain amount of buffer
 	}
 }
 

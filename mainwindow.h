@@ -5,10 +5,13 @@
 #include <QFileDialog>
 #include <QMainWindow>
 #include <QMenu>
+#include <QMessageBox>
 #include <QProcess>
 #include <QStyleFactory>
 
 #include <string>
+
+using std::string;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -17,7 +20,6 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
-	typedef std::string string;
 
 public:
 	MainWindow(QWidget *parent = nullptr);
@@ -32,6 +34,11 @@ private slots:
 	void on_button_run_irene_clicked()		{ run_irene(); }
 	void on_button_stop_polybius_clicked()	{ stop_polybius(); }
 	void on_button_stop_irene_clicked()		{ stop_irene(); }
+
+	string read_path_polybius();
+	string read_path_irene();
+	void write_path_polybius(string path);
+	void write_path_irene(string path);
 
 	void contextMenu_polybius(const QPoint& pos);
 	void contextMenu_irene(const QPoint& pos);
@@ -59,9 +66,10 @@ private:
 	const unsigned int lines_buffer = 1024;	// seems like this is default for standard terminals
 	const unsigned int chars_buffer = 80 * lines_buffer;	// standard terminal width
 
-	const string path_saved = "paths.txt";
-	string path_polybius = "";
-	string path_irene = "";
+	const string path_saved_paths = "paths.txt";
+	const string path_logs = "Logs\\";
+	const string prefix_polybius = "polybius:";
+	const string prefix_irene = "irene:";
 
 	QPalette dark_palette();
 
