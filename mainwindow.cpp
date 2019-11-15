@@ -303,6 +303,7 @@ void MainWindow::read_polybius()
 {
 	while (process_polybius->canReadLine()) {
 		QString line = process_polybius->readLine();
+		line.remove("\r");
 		log_polybius << line;
 		log_polybius.flush();
 		QString buffer = ui->console_polybius->toPlainText();
@@ -318,6 +319,7 @@ void MainWindow::read_irene()
 {
 	while (process_irene->canReadLine()) {
 		QString line = process_irene->readLine();
+		line.remove("\r");
 		log_irene << line;
 		log_irene.flush();
 		QString buffer = ui->console_irene->toPlainText();
