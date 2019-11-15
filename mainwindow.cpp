@@ -304,7 +304,8 @@ void MainWindow::read_polybius()
 	while (process_polybius->canReadLine()) {
 		QString line = process_polybius->readLine();
 		line.remove("\r");
-		log_polybius << line;
+		QString date = QDateTime::currentDateTime().toString(Qt::ISODate);
+		log_polybius << date << "> " << line;
 		log_polybius.flush();
 		QString buffer = ui->console_polybius->toPlainText();
 		if (static_cast<unsigned int>(buffer.size()) > chars_buffer) {
@@ -320,7 +321,8 @@ void MainWindow::read_irene()
 	while (process_irene->canReadLine()) {
 		QString line = process_irene->readLine();
 		line.remove("\r");
-		log_irene << line;
+		QString date = QDateTime::currentDateTime().toString(Qt::ISODate);
+		log_polybius << date << "> " << line;
 		log_irene.flush();
 		QString buffer = ui->console_irene->toPlainText();
 		if (static_cast<unsigned int>(buffer.size()) > chars_buffer) {
