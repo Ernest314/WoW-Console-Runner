@@ -9,10 +9,6 @@
 #include <QProcess>
 #include <QStyleFactory>
 
-#include <string>
-
-using std::string;
-
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -35,10 +31,10 @@ private slots:
 	void on_button_stop_polybius_clicked()	{ stop_polybius(); }
 	void on_button_stop_irene_clicked()		{ stop_irene(); }
 
-	string read_path_polybius();
-	string read_path_irene();
-	void write_path_polybius(string path);
-	void write_path_irene(string path);
+	QString read_path_polybius();
+	QString read_path_irene();
+	void write_path_polybius(QString path);
+	void write_path_irene(QString path);
 
 	void contextMenu_polybius(const QPoint& pos);
 	void contextMenu_irene(const QPoint& pos);
@@ -66,10 +62,10 @@ private:
 	const unsigned int lines_buffer = 1024;	// seems like this is default for standard terminals
 	const unsigned int chars_buffer = 80 * lines_buffer;	// standard terminal width
 
-	const string path_saved_paths = "paths.txt";
-	const string path_logs = "Logs\\";
-	const string prefix_polybius = "polybius:";
-	const string prefix_irene = "irene:";
+	const QString path_saved_paths = "paths.txt";
+	const QString path_logs = "Logs\\";
+	const QString prefix_polybius = "polybius:";
+	const QString prefix_irene = "irene:";
 
 	QPalette dark_palette();
 
