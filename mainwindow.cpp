@@ -5,7 +5,9 @@ MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent),
 	ui(new Ui::MainWindow),
 	process_polybius(new QProcess(parent)),
-	process_irene(new QProcess(parent))
+	process_irene(new QProcess(parent)),
+	log_polybius(QTextStream()),
+	log_irene(QTextStream())
 {
 	// Set application theme (dark theme).
 	// `QAppliction::setStyle` works, `this->setStyle` does not
@@ -43,8 +45,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 	// Initialize lineEdit text with the paths to their
 	// corresponding .exe files.
-	ui->lineEdit_exe_polybius->setText(read_path_polybius().c_str());
-	ui->lineEdit_exe_irene->setText(read_path_irene().c_str());
+	ui->lineEdit_exe_polybius->setText(read_path_polybius());
+	ui->lineEdit_exe_irene->setText(read_path_irene());
 }
 
 MainWindow::~MainWindow()
@@ -55,59 +57,61 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
-string MainWindow::read_path_polybius()
+QString MainWindow::read_path_polybius()
 {
-	if (!QFile::exists(path_saved_paths.c_str())) {
-		return QDir::homePath().toStdString();
+	if (!QFile::exists(path_saved_paths)) {
+		return QDir::homePath();
 	}
-	QFile* file = new QFile(path_saved_paths.c_str());
+	QFile* file = new QFile(path_saved_paths);
 	file->open(QIODevice::ReadOnly | QIODevice::Text);
 	QString data = file->readAll();
 	QStringList lines = data.split("\n", QString::SkipEmptyParts);
-	string path = "";
+	QString path = "";
 	for (QString line : lines) {
-		if (line.startsWith(prefix_polybius.c_str())) {
-			path = line.remove(prefix_polybius.c_str()).toStdString();
+		if (line.startsWith(prefix_polybius)) {
+			path = line.remove(prefix_polybius);
 		}
 	}
 	if (path == "") {
-		path = QDir::homePath().toStdString();
+		path = QDir::homePath();
 	}
 	return path;
 }
-string MainWindow::read_path_irene()
+QString MainWindow::read_path_irene()
 {
-	if (!QFile::exists(path_saved_paths.c_str())) {
-		return QDir::homePath().toStdString();
+	if (!QFile::exists(path_saved_paths)) {
+		return QDir::homePath();
 	}
-	QFile* file = new QFile(path_saved_paths.c_str());
+	QFile* file = new QFile(path_saved_paths);
 	file->open(QIODevice::ReadOnly | QIODevice::Text);
 	QString data = file->readAll().trimmed();
 	QStringList lines = data.split("\n", QString::SkipEmptyParts);
-	string path = "";
+	QString path = "";
 	for (QString line : lines) {
-		if (line.startsWith(prefix_irene.c_str())) {
-			path = line.remove(prefix_irene.c_str()).toStdString();
+		if (line.startsWith(prefix_irene)) {
+			path = line.remove(prefix_irene);
 		}
 	}
 	if (path == "") {
-		path = QDir::homePath().toStdString();
+		path = QDir::homePath();
 	}
 	return path;
 }
-void MainWindow::write_path_polybius(string path)
+void MainWindow::write_path_polybius(QString path)
 {
-	QFile file(path_saved_paths.c_str());
+	QDir dir(path_saved_paths);
+	dir.mkpath(get_dir_of_file(path_saved_paths));
+	QFile file(path_saved_paths);
 	file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text);
 	QString data = file.readAll().trimmed();
-	if (!data.contains(prefix_polybius.c_str())) {
-		data += ("\n" + prefix_polybius + path).c_str();
+	if (!data.contains(prefix_polybius)) {
+		data += "\n" + prefix_polybius + path;
 	}
 	QString data_new = "";
 	QStringList lines = data.split("\n", QString::SkipEmptyParts);
 	for (QString line : lines) {
-		if (line.startsWith(prefix_polybius.c_str())) {
-			line = (prefix_polybius + path).c_str();
+		if (line.startsWith(prefix_polybius)) {
+			line = prefix_polybius + path;
 		}
 		data_new += line + "\n";
 	}
@@ -116,19 +120,21 @@ void MainWindow::write_path_polybius(string path)
 	out << data_new;
 	return;
 }
-void MainWindow::write_path_irene(string path)
+void MainWindow::write_path_irene(QString path)
 {
-	QFile file(path_saved_paths.c_str());
+	QDir dir(path_saved_paths);
+	dir.mkpath(get_dir_of_file(path_saved_paths));
+	QFile file(path_saved_paths);
 	file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text);
 	QString data = file.readAll().trimmed();
-	if (!data.contains(prefix_irene.c_str())) {
-		data += ("\n" + prefix_irene + path).c_str();
+	if (!data.contains(prefix_irene)) {
+		data += "\n" + prefix_irene + path;
 	}
 	QString data_new = "";
 	QStringList lines = data.split("\n", QString::SkipEmptyParts);
 	for (QString line : lines) {
-		if (line.startsWith(prefix_irene.c_str())) {
-			line = (prefix_irene + path).c_str();
+		if (line.startsWith(prefix_irene)) {
+			line = prefix_irene + path;
 		}
 		data_new += line + "\n";
 	}
@@ -225,7 +231,17 @@ void MainWindow::run_polybius()
 		message_error.exec();
 		return;
 	}
-	write_path_polybius(path.toStdString());
+	write_path_polybius(path);
+	QString path_log =
+			path_logs +
+			"polybius-" +
+			QDateTime::currentDateTime().toString(Qt::ISODate).remove(":") +
+			".txt" ;
+	QDir dir(path_log);
+	dir.mkpath(get_dir_of_file(path_log));
+	QFile* log = new QFile(path_log);
+	log->open(QIODevice::WriteOnly | QIODevice::Text);
+	log_polybius.setDevice(log);
 	process_polybius->setProgram(path);
 	process_polybius->setWorkingDirectory(get_dir_of_file(path));
 	process_polybius->setReadChannel(QProcess::StandardOutput);
@@ -244,7 +260,17 @@ void MainWindow::run_irene()
 		message_error.exec();
 		return;
 	}
-	write_path_irene(path.toStdString());
+	write_path_irene(path);
+	QString path_log =
+			path_logs +
+			"irene-" +
+			QDateTime::currentDateTime().toString(Qt::ISODate).remove(":") +
+			".txt" ;
+	QDir dir(path_log);
+	dir.mkpath(get_dir_of_file(path_log));
+	QFile* log = new QFile(path_log);
+	log->open(QIODevice::WriteOnly | QIODevice::Text);
+	log_irene.setDevice(log);
 	process_irene->setProgram(path);
 	process_irene->setWorkingDirectory(get_dir_of_file(path));
 	process_irene->setReadChannel(QProcess::StandardOutput);
@@ -268,6 +294,8 @@ void MainWindow::read_polybius()
 {
 	while (process_polybius->canReadLine()) {
 		QString line = process_polybius->readLine();
+		log_polybius << line;
+		log_polybius.flush();
 		QString buffer = ui->console_polybius->toPlainText();
 		if (static_cast<unsigned int>(buffer.size()) > chars_buffer) {
 			int cutoff = buffer.indexOf("\n", chars_buffer/2);
@@ -281,6 +309,8 @@ void MainWindow::read_irene()
 {
 	while (process_irene->canReadLine()) {
 		QString line = process_irene->readLine();
+		log_irene << line;
+		log_irene.flush();
 		QString buffer = ui->console_irene->toPlainText();
 		if (static_cast<unsigned int>(buffer.size()) > chars_buffer) {
 			int cutoff = buffer.indexOf("\n", chars_buffer/2);

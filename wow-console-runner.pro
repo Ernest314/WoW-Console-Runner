@@ -13,7 +13,7 @@ CONFIG(release) {
 # (the exact warnings are compiler-dependent).
 DEFINES += QT_DEPRECATED_WARNINGS
 
-RC_ICONS = icon.ico
+RC_ICONS = rc/icon.ico
 
 SOURCES += \
     main.cpp \
