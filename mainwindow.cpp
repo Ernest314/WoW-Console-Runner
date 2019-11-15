@@ -180,6 +180,15 @@ void MainWindow::contextMenu_irene(const QPoint& pos) {
 	delete menu;
 }
 
+void MainWindow::on_button_logs_polybius_clicked()
+{
+	QDesktopServices::openUrl(path_logs);
+}
+void MainWindow::on_button_logs_irene_clicked()
+{
+	QDesktopServices::openUrl(path_logs);
+}
+
 void MainWindow::set_buttons_polybius(QProcess::ProcessState state)
 {
 	switch (state) {
@@ -354,7 +363,7 @@ QPalette MainWindow::dark_palette()
 
 QString MainWindow::get_dir_of_file(QString path)
 {
-	QDir dir = QDir(path);
-	dir.cdUp();
-	return dir.path();
+	int i = path.lastIndexOf("/");
+	QString trimmed = path.left(i);
+	return trimmed;
 }
