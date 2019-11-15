@@ -97,6 +97,8 @@ QString MainWindow::read_path_irene()
 }
 void MainWindow::write_path_polybius(QString path)
 {
+	QDir dir(path_saved_paths);
+	dir.mkpath(get_dir_of_file(path_saved_paths));
 	QFile file(path_saved_paths);
 	file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text);
 	QString data = file.readAll().trimmed();
@@ -118,6 +120,8 @@ void MainWindow::write_path_polybius(QString path)
 }
 void MainWindow::write_path_irene(QString path)
 {
+	QDir dir(path_saved_paths);
+	dir.mkpath(get_dir_of_file(path_saved_paths));
 	QFile file(path_saved_paths);
 	file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text);
 	QString data = file.readAll().trimmed();

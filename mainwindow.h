@@ -1,13 +1,15 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QDebug>
+#include <QMenu>
+#include <QProcess>
+#include <QStandardPaths>
+#include <QStyleFactory>
+#include <QTextStream>
+
 #include <QFileDialog>
 #include <QMainWindow>
-#include <QMenu>
 #include <QMessageBox>
-#include <QProcess>
-#include <QStyleFactory>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -62,8 +64,10 @@ private:
 	const unsigned int lines_buffer = 1024;	// seems like this is default for standard terminals
 	const unsigned int chars_buffer = 80 * lines_buffer;	// standard terminal width
 
-	const QString path_saved_paths = "paths.txt";
-	const QString path_logs = "Logs\\";
+	const QString path_appdata =
+			QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/";
+	const QString path_saved_paths = path_appdata + "paths.txt";
+	const QString path_logs = path_appdata + "Logs/";
 	const QString prefix_polybius = "polybius:";
 	const QString prefix_irene = "irene:";
 
