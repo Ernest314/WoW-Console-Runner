@@ -14,7 +14,7 @@
    <string>WoW Console Runner</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="graphics.qrc">
+   <iconset>
     <normaloff>:/icon.png</normaloff>:/icon.png</iconset>
   </property>
   <widget class="QWidget" name="widget_main">
@@ -146,6 +146,12 @@
       </item>
       <item>
        <layout class="QHBoxLayout" name="layout_run_polybius">
+        <property name="leftMargin">
+         <number>15</number>
+        </property>
+        <property name="rightMargin">
+         <number>15</number>
+        </property>
         <item>
          <spacer name="spacer_polybius_L">
           <property name="orientation">
@@ -219,6 +225,22 @@
            </size>
           </property>
          </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="button_logs_polybius">
+          <property name="maximumSize">
+           <size>
+            <width>40</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Open the logs folder.</string>
+          </property>
+          <property name="text">
+           <string>Logs</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -331,6 +353,12 @@
       </item>
       <item>
        <layout class="QHBoxLayout" name="layout_run_irene">
+        <property name="leftMargin">
+         <number>15</number>
+        </property>
+        <property name="rightMargin">
+         <number>15</number>
+        </property>
         <item>
          <spacer name="spacer_irene_L">
           <property name="orientation">
@@ -405,6 +433,22 @@
           </property>
          </spacer>
         </item>
+        <item>
+         <widget class="QPushButton" name="button_logs_irene">
+          <property name="maximumSize">
+           <size>
+            <width>40</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Open the logs folder.</string>
+          </property>
+          <property name="text">
+           <string>Logs</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
      </layout>
@@ -418,14 +462,16 @@
   <tabstop>button_exe_polybius</tabstop>
   <tabstop>button_clear_polybius</tabstop>
   <tabstop>button_run_polybius</tabstop>
+  <tabstop>button_stop_polybius</tabstop>
+  <tabstop>button_logs_polybius</tabstop>
   <tabstop>console_irene</tabstop>
   <tabstop>lineEdit_exe_irene</tabstop>
   <tabstop>button_exe_irene</tabstop>
   <tabstop>button_clear_irene</tabstop>
   <tabstop>button_run_irene</tabstop>
+  <tabstop>button_stop_irene</tabstop>
+  <tabstop>button_logs_irene</tabstop>
  </tabstops>
- <resources>
-  <include location="graphics.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QDateTime>
+#include <QDesktopServices>
 #include <QMenu>
 #include <QProcess>
 #include <QStandardPaths>
@@ -33,6 +34,8 @@ private slots:
 	void on_button_run_irene_clicked()		{ run_irene(); }
 	void on_button_stop_polybius_clicked()	{ stop_polybius(); }
 	void on_button_stop_irene_clicked()		{ stop_irene(); }
+	void on_button_logs_polybius_clicked();
+	void on_button_logs_irene_clicked();
 
 	QString read_path_polybius();
 	QString read_path_irene();

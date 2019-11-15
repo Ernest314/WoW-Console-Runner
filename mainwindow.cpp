@@ -180,6 +180,15 @@ void MainWindow::contextMenu_irene(const QPoint& pos) {
 	delete menu;
 }
 
+void MainWindow::on_button_logs_polybius_clicked()
+{
+	QDesktopServices::openUrl(path_logs);
+}
+void MainWindow::on_button_logs_irene_clicked()
+{
+	QDesktopServices::openUrl(path_logs);
+}
+
 void MainWindow::set_buttons_polybius(QProcess::ProcessState state)
 {
 	switch (state) {
@@ -294,7 +303,9 @@ void MainWindow::read_polybius()
 {
 	while (process_polybius->canReadLine()) {
 		QString line = process_polybius->readLine();
-		log_polybius << line;
+		line.remove("\r");
+		QString date = QDateTime::currentDateTime().toString(Qt::ISODate);
+		log_polybius << date << "> " << line;
 		log_polybius.flush();
 		QString buffer = ui->console_polybius->toPlainText();
 		if (static_cast<unsigned int>(buffer.size()) > chars_buffer) {
@@ -309,7 +320,9 @@ void MainWindow::read_irene()
 {
 	while (process_irene->canReadLine()) {
 		QString line = process_irene->readLine();
-		log_irene << line;
+		line.remove("\r");
+		QString date = QDateTime::currentDateTime().toString(Qt::ISODate);
+		log_polybius << date << "> " << line;
 		log_irene.flush();
 		QString buffer = ui->console_irene->toPlainText();
 		if (static_cast<unsigned int>(buffer.size()) > chars_buffer) {
@@ -354,7 +367,7 @@ QPalette MainWindow::dark_palette()
 
 QString MainWindow::get_dir_of_file(QString path)
 {
-	QDir dir = QDir(path);
-	dir.cdUp();
-	return dir.path();
+	int i = path.lastIndexOf("/");
+	QString trimmed = path.left(i);
+	return trimmed;
 }
