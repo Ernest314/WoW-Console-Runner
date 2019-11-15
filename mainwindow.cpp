@@ -5,7 +5,9 @@ MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent),
 	ui(new Ui::MainWindow),
 	process_polybius(new QProcess(parent)),
-	process_irene(new QProcess(parent))
+	process_irene(new QProcess(parent)),
+	log_polybius(QTextStream()),
+	log_irene(QTextStream())
 {
 	// Set application theme (dark theme).
 	// `QAppliction::setStyle` works, `this->setStyle` does not
@@ -230,6 +232,16 @@ void MainWindow::run_polybius()
 		return;
 	}
 	write_path_polybius(path);
+	QString path_log =
+			path_logs +
+			"polybius-" +
+			QDateTime::currentDateTime().toString(Qt::ISODate).remove(":") +
+			".txt" ;
+	QDir dir(path_log);
+	dir.mkpath(get_dir_of_file(path_log));
+	QFile* log = new QFile(path_log);
+	log->open(QIODevice::WriteOnly | QIODevice::Text);
+	log_polybius.setDevice(log);
 	process_polybius->setProgram(path);
 	process_polybius->setWorkingDirectory(get_dir_of_file(path));
 	process_polybius->setReadChannel(QProcess::StandardOutput);
@@ -249,6 +261,16 @@ void MainWindow::run_irene()
 		return;
 	}
 	write_path_irene(path);
+	QString path_log =
+			path_logs +
+			"irene-" +
+			QDateTime::currentDateTime().toString(Qt::ISODate).remove(":") +
+			".txt" ;
+	QDir dir(path_log);
+	dir.mkpath(get_dir_of_file(path_log));
+	QFile* log = new QFile(path_log);
+	log->open(QIODevice::WriteOnly | QIODevice::Text);
+	log_irene.setDevice(log);
 	process_irene->setProgram(path);
 	process_irene->setWorkingDirectory(get_dir_of_file(path));
 	process_irene->setReadChannel(QProcess::StandardOutput);
@@ -272,6 +294,8 @@ void MainWindow::read_polybius()
 {
 	while (process_polybius->canReadLine()) {
 		QString line = process_polybius->readLine();
+		log_polybius << line;
+		log_polybius.flush();
 		QString buffer = ui->console_polybius->toPlainText();
 		if (static_cast<unsigned int>(buffer.size()) > chars_buffer) {
 			int cutoff = buffer.indexOf("\n", chars_buffer/2);
@@ -285,6 +309,8 @@ void MainWindow::read_irene()
 {
 	while (process_irene->canReadLine()) {
 		QString line = process_irene->readLine();
+		log_irene << line;
+		log_irene.flush();
 		QString buffer = ui->console_irene->toPlainText();
 		if (static_cast<unsigned int>(buffer.size()) > chars_buffer) {
 			int cutoff = buffer.indexOf("\n", chars_buffer/2);

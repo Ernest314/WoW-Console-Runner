@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QDateTime>
 #include <QMenu>
 #include <QProcess>
 #include <QStandardPaths>
@@ -60,6 +61,8 @@ private:
 	Ui::MainWindow* ui;
 	QProcess* process_polybius;
 	QProcess* process_irene;
+	QTextStream log_polybius;
+	QTextStream log_irene;
 
 	const unsigned int lines_buffer = 1024;	// seems like this is default for standard terminals
 	const unsigned int chars_buffer = 80 * lines_buffer;	// standard terminal width

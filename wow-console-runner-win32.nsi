@@ -1,4 +1,4 @@
-!define VERSION "v1.2"
+!define VERSION "v1.3"
 !define NAME_LOWER "wow-console-runner"
 !define NAME_UPPER "WoW-Console-Runner"
 !define NAME_SPACE "WoW Console Runner"
