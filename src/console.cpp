@@ -42,6 +42,14 @@ Console::~Console()
 	delete process;
 }
 
+void Console::context_menu(const QPoint& pos)
+{
+	QMenu* menu = console->createStandardContextMenu(pos);
+	menu->addAction("Clea&r", this, &Console::clear_buffer);
+	menu->exec(console->mapToGlobal(pos));
+	delete menu;
+}
+
 void Console::start_process()
 {
 	// Clean up in case we are actually *re*starting.
@@ -104,36 +112,6 @@ void Console::open_logs()
 	QDesktopServices::openUrl(path_logs);
 }
 
-void Console::pipe_output()
-{
-	while (process->canReadLine()) {
-		QString line = process->readLine();
-		line.remove("\r");
-
-		// Log timestamped console output.
-		QString date = QDateTime::currentDateTime().toString(Qt::ISODate);
-		logger << date << "> " << line;
-		logger.flush();	// write to file as soon as possible
-
-		// Clear the oldest half of the buffer (to the nearest line),
-		// then update console display.
-		QString buffer = console->toPlainText();
-		if (static_cast<unsigned int>(buffer.size()) > chars_buf) {
-			int cutoff = buffer.indexOf("\n", chars_buf/2);
-			buffer = buffer.remove(0, cutoff + 1);
-		}
-		console->setPlainText(buffer + line);
-	}
-}
-
-void Console::context_menu(const QPoint& pos)
-{
-	QMenu* menu = console->createStandardContextMenu(pos);
-	menu->addAction("Clea&r", this, &Console::clear_buffer);
-	menu->exec(console->mapToGlobal(pos));
-	delete menu;
-}
-
 QMap<QString, QString> Console::load_path_data(QString file)
 {
 	QMap<QString, QString> data = QMap<QString, QString>();
@@ -187,4 +165,26 @@ void Console::save_exe_path(QString path)
 	out.flush();
 
 	return;
+}
+
+void Console::pipe_output()
+{
+	while (process->canReadLine()) {
+		QString line = process->readLine();
+		line.remove("\r");
+
+		// Log timestamped console output.
+		QString date = QDateTime::currentDateTime().toString(Qt::ISODate);
+		logger << date << "> " << line;
+		logger.flush();	// write to file as soon as possible
+
+		// Clear the oldest half of the buffer (to the nearest line),
+		// then update console display.
+		QString buffer = console->toPlainText();
+		if (static_cast<unsigned int>(buffer.size()) > chars_buf) {
+			int cutoff = buffer.indexOf("\n", chars_buf/2);
+			buffer = buffer.remove(0, cutoff + 1);
+		}
+		console->setPlainText(buffer + line);
+	}
 }
