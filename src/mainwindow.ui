@@ -53,9 +53,6 @@
         <property name="contextMenuPolicy">
          <enum>Qt::CustomContextMenu</enum>
         </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(30, 30, 30); color: rgb(136, 204, 149);</string>
-        </property>
         <property name="undoRedoEnabled">
          <bool>false</bool>
         </property>
@@ -261,9 +258,6 @@
         </property>
         <property name="contextMenuPolicy">
          <enum>Qt::CustomContextMenu</enum>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(30, 30, 30); color: rgb(191, 142, 204);</string>
         </property>
         <property name="undoRedoEnabled">
          <bool>false</bool>
