@@ -15,3 +15,10 @@ QString Utils::get_dir_of_path(QString path)
 	QString trimmed = path.left(i);
 	return trimmed;
 }
+
+QFile Utils::get_created_file(QString path)
+{
+	QDir dir(path);
+	dir.mkpath(get_dir_of_path(path));
+	return QFile(path);
+}
