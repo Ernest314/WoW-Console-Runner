@@ -1,17 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QDateTime>
-#include <QDesktopServices>
-#include <QMenu>
+#include <QPalette>
 #include <QProcess>
-#include <QStandardPaths>
 #include <QStyleFactory>
-#include <QTextStream>
 
-#include <QFileDialog>
 #include <QMainWindow>
-#include <QMessageBox>
 
 #include "utils.h"
 #include "console.h"
