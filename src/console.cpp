@@ -42,22 +42,6 @@ Console::~Console()
 	delete process;
 }
 
-void Console::set_exe_path()
-{
-	QString path =
-			QFileDialog::getOpenFileName(
-				parent,
-				name_exe + " path",
-				QDir::homePath(),
-				"Executable (*.exe)" );
-	if (path != nullptr) lineEdit->setText(path);
-}
-
-void Console::clear_buffer()
-{
-	console->setPlainText("");
-}
-
 void Console::start_process()
 {
 	stop_process();
@@ -93,6 +77,22 @@ void Console::stop_process()
 	process->close();
 }
 
+void Console::set_exe_path()
+{
+	QString path =
+			QFileDialog::getOpenFileName(
+				parent,
+				name_exe + " path",
+				QDir::homePath(),
+				"Executable (*.exe)" );
+	if (path != nullptr) lineEdit->setText(path);
+}
+
+void Console::clear_buffer()
+{
+	console->setPlainText("");
+}
+
 void Console::open_logs()
 {
 	QDesktopServices::openUrl(path_logs);
@@ -113,6 +113,14 @@ void Console::pipe_output()
 		}
 		console->setPlainText(buffer + line);
 	}
+}
+
+void Console::context_menu(const QPoint& pos)
+{
+	QMenu* menu = console->createStandardContextMenu(pos);
+	menu->addAction("Clea&r", this, &Console::clear_buffer);
+	menu->exec(console->mapToGlobal(pos));
+	delete menu;
 }
 
 QString Console::load_exe_path()
@@ -158,12 +166,4 @@ void Console::save_exe_path(QString path)
 	QTextStream out(&file);
 	out << data_new;
 	return;
-}
-
-void Console::context_menu(const QPoint& pos)
-{
-	QMenu* menu = console->createStandardContextMenu(pos);
-	menu->addAction("Clea&r", this, &Console::clear_buffer);
-	menu->exec(console->mapToGlobal(pos));
-	delete menu;
 }
