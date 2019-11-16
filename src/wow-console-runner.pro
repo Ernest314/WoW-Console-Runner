@@ -16,10 +16,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 RC_ICONS = rc/icon.ico
 
 SOURCES += \
+    utils.cpp \
     main.cpp \
+    console.cpp \
     mainwindow.cpp
 
 HEADERS += \
+    utils.h \
+    console.h \
     mainwindow.h
 
 FORMS += \
