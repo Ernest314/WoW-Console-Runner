@@ -322,7 +322,7 @@ void MainWindow::read_irene()
 		QString line = process_irene->readLine();
 		line.remove("\r");
 		QString date = QDateTime::currentDateTime().toString(Qt::ISODate);
-		log_polybius << date << "> " << line;
+		log_irene << date << "> " << line;
 		log_irene.flush();
 		QString buffer = ui->console_irene->toPlainText();
 		if (static_cast<unsigned int>(buffer.size()) > chars_buffer) {
