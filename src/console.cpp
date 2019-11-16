@@ -19,18 +19,18 @@ Console::Console(
 {
 	// Change button state based on if processes are running.
 	QObject::connect(
-				process, &QProcess::stateChanged,
-				this, &Console::state_changed );
+			process, &QProcess::stateChanged,
+			this, &Console::state_changed );
 
 	// Redirect process output to console widgets.
 	QObject::connect(
-				process, &QProcess::readyReadStandardOutput,
-				this, &Console::pipe_output );
+			process, &QProcess::readyReadStandardOutput,
+			this, &Console::pipe_output );
 
 	// Grab context menu event on consoles (to add "clear" option).
 	QObject::connect(
-				console, &QPlainTextEdit::customContextMenuRequested,
-				this, &Console::context_menu );
+			console, &QPlainTextEdit::customContextMenuRequested,
+			this, &Console::context_menu );
 
 	// Initialize lineEdit text with the paths to their
 	// corresponding .exe files.
