@@ -69,14 +69,14 @@ void Console::start_process()
 			QDateTime::currentDateTime().toString(Qt::ISODate).remove(":") +
 			".txt" ;
 	QDir dir(path_log);
-	dir.mkpath(Utils::get_dir_of_file(path_log));
+	dir.mkpath(Utils::get_dir_of_path(path_log));
 	QFile* file = new QFile(path_log);
 	file->open(QIODevice::WriteOnly | QIODevice::Text);
 	logger.setDevice(file);
 
 	// Set up executable options and run.
 	process->setProgram(path);
-	process->setWorkingDirectory(Utils::get_dir_of_file(path));
+	process->setWorkingDirectory(Utils::get_dir_of_path(path));
 	process->setReadChannel(QProcess::StandardOutput);
 	process->start();
 }
@@ -164,7 +164,7 @@ QString Console::load_exe_path()
 void Console::save_exe_path(QString path)
 {
 	QDir dir(path_saved_paths);
-	dir.mkpath(Utils::get_dir_of_file(path_saved_paths));
+	dir.mkpath(Utils::get_dir_of_path(path_saved_paths));
 	QFile file(path_saved_paths);
 	file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text);
 	QString data = file.readAll().trimmed();

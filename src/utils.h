@@ -5,7 +5,7 @@
 
 namespace Utils
 {
-QString get_dir_of_file(QString path);
+QString get_dir_of_path(QString path);
 }
 
 #endif // UTILS_H
