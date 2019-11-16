@@ -13,6 +13,9 @@
 #include <QMainWindow>
 #include <QMessageBox>
 
+#include "utils.h"
+#include "console.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -25,61 +28,27 @@ public:
 	MainWindow(QWidget *parent = nullptr);
 	~MainWindow();
 
+private:
+	Ui::MainWindow* ui;
+	Console* console_polybius;
+	Console* console_irene;
+
+	static QPalette dark_palette();
+
 private slots:
-	void on_button_exe_polybius_clicked();
-	void on_button_exe_irene_clicked();
-	void on_button_clear_polybius_clicked()	{ clear_polybius(); }
-	void on_button_clear_irene_clicked()	{ clear_irene(); }
-	void on_button_run_polybius_clicked()	{ run_polybius(); }
-	void on_button_run_irene_clicked()		{ run_irene(); }
-	void on_button_stop_polybius_clicked()	{ stop_polybius(); }
-	void on_button_stop_irene_clicked()		{ stop_irene(); }
-	void on_button_logs_polybius_clicked();
-	void on_button_logs_irene_clicked();
-
-	QString read_path_polybius();
-	QString read_path_irene();
-	void write_path_polybius(QString path);
-	void write_path_irene(QString path);
-
-	void contextMenu_polybius(const QPoint& pos);
-	void contextMenu_irene(const QPoint& pos);
+	void on_button_exe_polybius_clicked()	{ console_polybius->set_exe_path(); }
+	void on_button_exe_irene_clicked()		{ console_irene->set_exe_path(); }
+	void on_button_clear_polybius_clicked()	{ console_polybius->clear_buffer(); }
+	void on_button_clear_irene_clicked()	{ console_irene->clear_buffer(); }
+	void on_button_run_polybius_clicked()	{ console_polybius->start_process(); }
+	void on_button_run_irene_clicked()		{ console_irene->start_process(); }
+	void on_button_stop_polybius_clicked()	{ console_polybius->stop_process(); }
+	void on_button_stop_irene_clicked()		{ console_irene->stop_process(); }
+	void on_button_logs_polybius_clicked()	{ console_polybius->open_logs(); }
+	void on_button_logs_irene_clicked()		{ console_irene->open_logs(); }
 
 	void set_buttons_polybius(QProcess::ProcessState state);
 	void set_buttons_irene(QProcess::ProcessState state);
-
-	void clear_polybius();
-	void clear_irene();
-
-	void run_polybius();
-	void run_irene();
-
-	void stop_polybius();
-	void stop_irene();
-
-	void read_polybius();
-	void read_irene();
-
-private:
-	Ui::MainWindow* ui;
-	QProcess* process_polybius;
-	QProcess* process_irene;
-	QTextStream log_polybius;
-	QTextStream log_irene;
-
-	const unsigned int lines_buffer = 1024;	// seems like this is default for standard terminals
-	const unsigned int chars_buffer = 80 * lines_buffer;	// standard terminal width
-
-	const QString path_appdata =
-			QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/";
-	const QString path_saved_paths = path_appdata + "paths.txt";
-	const QString path_logs = path_appdata + "Logs/";
-	const QString prefix_polybius = "polybius:";
-	const QString prefix_irene = "irene:";
-
-	QPalette dark_palette();
-
-	QString get_dir_of_file(QString path);
 };
 
 #endif // MAINWINDOW_H
