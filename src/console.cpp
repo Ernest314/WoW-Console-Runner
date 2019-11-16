@@ -44,18 +44,25 @@ Console::~Console()
 
 void Console::start_process()
 {
+	// Clean up in case we are actually *re*starting.
 	stop_process();
 	clear_buffer();
+
+	// Don't try to start if process isn't runnable.
 	QString path = lineEdit->text();
-	if (!QFile::exists(path) || !path.endsWith(".exe")) {
+	bool is_runnable = QFile::exists(path) && path.endsWith(".exe");
+	if (!is_runnable) {
 		QMessageBox message_error;
 		message_error.setWindowTitle("WoW Console Runner");
-		message_error.setText("There is no valid file at that path.");
+		message_error.setText("There is no valid executable specified.");
 		message_error.setIcon(QMessageBox::Warning);
 		message_error.exec();
 		return;
 	}
+
 	save_exe_path(path);
+
+	// Open a handle to the log file.
 	QString path_log =
 			path_logs +
 			prefix_logs +
@@ -66,6 +73,8 @@ void Console::start_process()
 	QFile* file = new QFile(path_log);
 	file->open(QIODevice::WriteOnly | QIODevice::Text);
 	logger.setDevice(file);
+
+	// Set up executable options and run.
 	process->setProgram(path);
 	process->setWorkingDirectory(Utils::get_dir_of_file(path));
 	process->setReadChannel(QProcess::StandardOutput);
@@ -74,11 +83,14 @@ void Console::start_process()
 
 void Console::stop_process()
 {
+	// no need to null-check--explicitly constructed with QProcess*
 	process->close();
 }
 
 void Console::set_exe_path()
 {
+	// requiring *.exe is the most validation possible here,
+	// without explicitly hooking into polybius.exe
 	QString path =
 			QFileDialog::getOpenFileName(
 				parent,
@@ -103,9 +115,14 @@ void Console::pipe_output()
 	while (process->canReadLine()) {
 		QString line = process->readLine();
 		line.remove("\r");
+
+		// Log timestamped console output.
 		QString date = QDateTime::currentDateTime().toString(Qt::ISODate);
 		logger << date << "> " << line;
-		logger.flush();
+		logger.flush();	// write to file as soon as possible
+
+		// Clear the oldest half of the buffer (to the nearest line),
+		// then update console display.
 		QString buffer = console->toPlainText();
 		if (static_cast<unsigned int>(buffer.size()) > chars_buf) {
 			int cutoff = buffer.indexOf("\n", chars_buf/2);

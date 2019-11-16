@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 	ui->setupUi(this);
 
+	// Set up console processes.
 	console_polybius = new Console(
 			this,
 			ui->console_polybius,
