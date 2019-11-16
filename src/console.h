@@ -5,6 +5,7 @@
 #include <QDesktopServices>
 #include <QDir>
 #include <QFile>
+#include <QMap>
 #include <QObject>
 #include <QPoint>
 #include <QProcess>
@@ -49,13 +50,13 @@ signals:
 	void state_changed(QProcess::ProcessState new_state);
 
 public slots:
+	void context_menu(const QPoint& pos);
+
 	void start_process();
 	void stop_process();
 	void set_exe_path();
 	void clear_buffer();
 	void open_logs();
-
-	void context_menu(const QPoint& pos);
 
 private:
 	QMainWindow* parent;
@@ -69,11 +70,13 @@ private:
 	QString prefix_logs;
 	QString name_exe;
 
-private slots:
-	void pipe_output();
+	QMap<QString, QString> load_path_data(QString file);
 
 	QString load_exe_path();
 	void save_exe_path(QString path);
+
+private slots:
+	void pipe_output();
 };
 
 #endif // CONSOLE_H

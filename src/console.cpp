@@ -134,21 +134,33 @@ void Console::context_menu(const QPoint& pos)
 	delete menu;
 }
 
+QMap<QString, QString> Console::load_path_data(QString file)
+{
+	QMap<QString, QString> data = QMap<QString, QString>();
+	QStringList lines = file.split("\n", QString::SkipEmptyParts);
+	for (QString line : lines) {
+		QString prefix_line = line.section(':', 0, 0);
+		QString data_line = line.section(':', 1);
+		data.insert(prefix_line, data_line);
+	}
+	return data;
+}
+
 QString Console::load_exe_path()
 {
+	// return user home directory as default if no paths.txt exists
 	if (!QFile::exists(path_saved_paths)) {
 		return QDir::homePath();
 	}
+
 	QFile file(path_saved_paths);
 	file.open(QIODevice::ReadOnly | QIODevice::Text);
-	QString data = file.readAll();
-	QStringList lines = data.split("\n", QString::SkipEmptyParts);
-	QString path = "";
-	for (QString line : lines) {
-		if (line.startsWith(prefix_data)) {
-			path = line.remove(prefix_data);
-		}
-	}
+	QString data_str = file.readAll().trimmed();
+
+	// read in current file's data
+	QMap<QString, QString> data = load_path_data(data_str);
+
+	QString path = data[prefix_data];
 	if (path == "") {
 		path = QDir::homePath();
 	}
@@ -159,20 +171,20 @@ void Console::save_exe_path(QString path)
 {
 	QFile file = Utils::get_created_file(path_saved_paths);
 	file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text);
-	QString data = file.readAll().trimmed();
-	if (!data.contains(prefix_data)) {
-		data += "\n" + prefix_data + path;
-	}
-	QString data_new = "";
-	QStringList lines = data.split("\n", QString::SkipEmptyParts);
-	for (QString line : lines) {
-		if (line.startsWith(prefix_data)) {
-			line = prefix_data + path;
-		}
-		data_new += line + "\n";
-	}
-	data_new = data_new.trimmed();
+	QString data_str = file.readAll().trimmed();
+
+	// read in current file's data
+	QMap<QString, QString> data = load_path_data(data_str);
+
+	// overwrites current value if it exists, otherwise inserts
+	data.insert(prefix_data, path);
+
+	// Write data out to file.
 	QTextStream out(&file);
-	out << data_new;
+	for (QString key : data.keys()) {
+		out << key << ":" << data[key];
+	}
+	out.flush();
+
 	return;
 }

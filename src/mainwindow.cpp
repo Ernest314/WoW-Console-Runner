@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
 			ui->console_polybius,
 			ui->lineEdit_exe_polybius,
 			new QProcess(parent),
-			"polybius:",
+			"polybius",
 			"polybius-",
 			"Polybius.exe" );
 	console_irene = new Console(
@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
 			ui->console_irene,
 			ui->lineEdit_exe_irene,
 			new QProcess(parent),
-			"irene:",
+			"irene",
 			"irene-",
 			"Irene.exe" );
 
