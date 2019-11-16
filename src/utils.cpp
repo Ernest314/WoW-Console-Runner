@@ -1,5 +1,14 @@
 #include "utils.h"
 
+void Utils::show_warning(QString warning)
+{
+	QMessageBox dialog;
+	dialog.setWindowTitle("WoW Console Runner");
+	dialog.setText(warning);
+	dialog.setIcon(QMessageBox::Warning);
+	dialog.exec();
+}
+
 QString Utils::get_dir_of_path(QString path)
 {
 	int i = -1;

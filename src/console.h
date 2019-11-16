@@ -18,7 +18,6 @@
 
 #include <QFileDialog>
 #include <QMainWindow>
-#include <QMessageBox>
 
 #include "utils.h"
 

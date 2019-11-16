@@ -52,11 +52,7 @@ void Console::start_process()
 	QString path = lineEdit->text();
 	bool is_runnable = QFile::exists(path) && path.endsWith(".exe");
 	if (!is_runnable) {
-		QMessageBox message_error;
-		message_error.setWindowTitle("WoW Console Runner");
-		message_error.setText("There is no valid executable specified.");
-		message_error.setIcon(QMessageBox::Warning);
-		message_error.exec();
+		Utils::show_warning("There is no valid executable specified.");
 		return;
 	}
 
