@@ -73,7 +73,10 @@ void Console::start_process()
 			QDateTime::currentDateTime().toString(Qt::ISODate).remove(":") +
 			".txt" ;
 	QFile* file = Utils::get_created_file(path_log);
-	file->open(QIODevice::WriteOnly | QIODevice::Text);
+	bool is_opened = file->open(QIODevice::WriteOnly | QIODevice::Text);
+	if (!is_opened) {
+		Utils::show_warning("Could not open log file. Bot will run but output will not be logged.");
+	}
 	logger.setDevice(file);
 
 	// Set up executable options and run.
@@ -109,7 +112,10 @@ void Console::clear_buffer()
 
 void Console::open_logs()
 {
-	QDesktopServices::openUrl(path_logs);
+	bool is_opened = QDesktopServices::openUrl(path_logs);
+	if (!is_opened) {
+		Utils::show_warning("Could not open Logs folder.");
+	}
 }
 
 QMap<QString, QString> Console::load_path_data(QString file)
@@ -131,9 +137,13 @@ QString Console::load_exe_path()
 		return QDir::homePath();
 	}
 
-	QFile file(path_saved_paths);
-	file.open(QIODevice::ReadOnly | QIODevice::Text);
-	QString data_str = file.readAll().trimmed();
+	QFile* file = new QFile(path_saved_paths);
+	bool is_opened = file->open(QIODevice::ReadOnly | QIODevice::Text);
+	if (!is_opened) {
+		Utils::show_warning("Saved .exe paths file found but could not be opened.");
+		return QDir::homePath();
+	}
+	QString data_str = file->readAll().trimmed();
 
 	// read in current file's data
 	QMap<QString, QString> data = load_path_data(data_str);
@@ -148,7 +158,12 @@ QString Console::load_exe_path()
 void Console::save_exe_path(QString path)
 {
 	QFile* file = Utils::get_created_file(path_saved_paths);
-	file->open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text);
+	bool is_opened  =
+			file->open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text);
+	if (!is_opened) {
+		Utils::show_warning("Could not open file to save .exe paths.");
+		return;
+	}
 	QString data_str = file->readAll().trimmed();
 
 	// read in current file's data
