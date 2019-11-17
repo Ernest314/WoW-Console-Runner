@@ -25,9 +25,9 @@ QString Utils::get_dir_of_path(QString path)
 	return trimmed;
 }
 
-QFile Utils::get_created_file(QString path)
+QFile* Utils::get_created_file(QString path)
 {
 	QDir dir(path);
 	dir.mkpath(get_dir_of_path(path));
-	return QFile(path);
+	return new QFile(path);
 }
