@@ -72,9 +72,9 @@ void Console::start_process()
 			prefix_logs +
 			QDateTime::currentDateTime().toString(Qt::ISODate).remove(":") +
 			".txt" ;
-	QFile file = Utils::get_created_file(path_log);
-	file.open(QIODevice::WriteOnly | QIODevice::Text);
-	logger.setDevice(&file);
+	QFile* file = Utils::get_created_file(path_log);
+	file->open(QIODevice::WriteOnly | QIODevice::Text);
+	logger.setDevice(file);
 
 	// Set up executable options and run.
 	process->setProgram(path);
@@ -147,9 +147,9 @@ QString Console::load_exe_path()
 
 void Console::save_exe_path(QString path)
 {
-	QFile file = Utils::get_created_file(path_saved_paths);
-	file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text);
-	QString data_str = file.readAll().trimmed();
+	QFile* file = Utils::get_created_file(path_saved_paths);
+	file->open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text);
+	QString data_str = file->readAll().trimmed();
 
 	// read in current file's data
 	QMap<QString, QString> data = load_path_data(data_str);
@@ -158,7 +158,7 @@ void Console::save_exe_path(QString path)
 	data.insert(prefix_data, path);
 
 	// Write data out to file.
-	QTextStream out(&file);
+	QTextStream out(file);
 	for (QString key : data.keys()) {
 		out << key << ":" << data[key];
 	}
