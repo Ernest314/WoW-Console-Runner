@@ -6,7 +6,7 @@ in DSharpPlus). Features include:
 
 + Stop/Run/Restart of either process
 + Displaying output of both processes
-+ Logging of console output\*
++ Logging of console output
 + Custom locations for bot .exe files
 
 ## [Polybius][1]
@@ -21,8 +21,6 @@ A utility bot for the guild, written to be expandable with modules.
 Also posts weekly announcements/reminders, but those must be
 configured in the code itself. See the [page for Irene][2] for
 more details.
-
-\* To be implemented.
 
 [1]: https://github.com/ErythroGuild/polybius
 [2]: https://github.com/ErythroGuild/irene
