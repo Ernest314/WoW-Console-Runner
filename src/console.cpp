@@ -121,7 +121,7 @@ void Console::open_logs()
 QMap<QString, QString> Console::load_path_data(QString file)
 {
 	QMap<QString, QString> data = QMap<QString, QString>();
-	QStringList lines = file.split("\n", QString::SkipEmptyParts);
+	QStringList lines = file.split("\n", Qt::SkipEmptyParts);
 	for (QString line : lines) {
 		QString prefix_line = line.section(':', 0, 0);
 		QString data_line = line.section(':', 1);
