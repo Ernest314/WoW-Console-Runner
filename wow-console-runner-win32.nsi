@@ -17,8 +17,8 @@ RequestExecutionLevel admin ; For writing to start menu & Program Files
 SetCompressor /SOLID lzma
 SetCompressorDictSize 32 ; MB - default is 8
 
-!define MUI_ICON	"${NAME_LOWER}-install.ico"
-!define MUI_UNICON	"${NAME_LOWER}-uninstall.ico"
+!define MUI_ICON	"install.ico"
+!define MUI_UNICON	"uninstall.ico"
 ; TODO: Add the other settings for MUI2 (and NSIS in general?).
 
 InstallDir "$PROGRAMFILES32\${NAME_SPACE}"
