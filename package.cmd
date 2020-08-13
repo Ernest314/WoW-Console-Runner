@@ -14,7 +14,7 @@ copy ..\%TITLE_LOWER%\%DIR_RELEASE%\%TITLE_LOWER%.exe %TITLE_LOWER%-win32\%TITLE
 @echo off
 cd %TITLE_LOWER%-win32
 @echo on
-"%PATH_NSIS%\makensis" /nocd /v3 %TITLE_LOWER%-win32.nsi
+"%PATH_NSIS%\makensis" /nocd /v3 installer-win32.nsi
 del ..\%TITLE_UPPER%-win32.exe
 move %TITLE_UPPER%-win32.exe ..
 @echo off
@@ -23,8 +23,8 @@ cd..
 
 @rem Win32 zip file
 del %TITLE_UPPER%-win32.zip
-"%PATH_7Z%\7z" a -mx9 -mmt -tzip -x!%TITLE_LOWER%-win32.nsi -r %TITLE_UPPER%-win32.zip %TITLE_LOWER%-win32
+"%PATH_7Z%\7z" a -mx9 -mmt -tzip -x!installer-win32.nsi -r %TITLE_UPPER%-win32.zip %TITLE_LOWER%-win32
 
 @rem Win32 7z file (LZMA)
 del %TITLE_UPPER%-win32.7z
-"%PATH_7Z%\7z" a -mx9 -mmt -t7z -x!%TITLE_LOWER%-win32.nsi -r %TITLE_UPPER%-win32.7z %TITLE_LOWER%-win32
+"%PATH_7Z%\7z" a -mx9 -mmt -t7z -x!installer-win32.nsi -r %TITLE_UPPER%-win32.7z %TITLE_LOWER%-win32
