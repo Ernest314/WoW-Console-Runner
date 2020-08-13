@@ -1,3 +1,5 @@
+Unicode true
+
 !define VERSION "v2.0"
 !define NAME_LOWER "wow-console-runner"
 !define NAME_UPPER "WoW-Console-Runner"
