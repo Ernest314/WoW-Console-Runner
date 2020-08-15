@@ -16,18 +16,21 @@ DEFINES += QT_DEPRECATED_WARNINGS
 RC_ICONS = rc/icon.ico
 
 SOURCES += \
+    tabconsole.cpp \
     utils.cpp \
     main.cpp \
     console.cpp \
     mainwindow.cpp
 
 HEADERS += \
+    tabconsole.h \
     utils.h \
     console.h \
     mainwindow.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    tabconsole.ui
 
 RESOURCES += \
     graphics.qrc
