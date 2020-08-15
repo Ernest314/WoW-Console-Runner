@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>rc/FiraCode-Regular.ttf</file>
+    </qresource>
+</RCC>

@@ -33,6 +33,7 @@ FORMS += \
     tabconsole.ui
 
 RESOURCES += \
+    fonts.qrc \
     graphics.qrc
 
 # Default rules for deployment.
