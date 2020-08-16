@@ -19,6 +19,9 @@
   </property>
   <widget class="QWidget" name="widget_main">
    <layout class="QVBoxLayout" name="layout_main">
+    <property name="spacing">
+     <number>4</number>
+    </property>
     <property name="leftMargin">
      <number>18</number>
     </property>
@@ -29,7 +32,7 @@
      <number>18</number>
     </property>
     <property name="bottomMargin">
-     <number>18</number>
+     <number>12</number>
     </property>
     <item>
      <layout class="QHBoxLayout" name="layout_buttons">
@@ -37,7 +40,7 @@
        <number>8</number>
       </property>
       <item>
-       <spacer name="spacer_buttons_L">
+       <spacer name="spacer_buttons">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -50,9 +53,9 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="button_settings">
+       <widget class="QPushButton" name="button_about">
         <property name="text">
-         <string>Settings</string>
+         <string>About</string>
         </property>
        </widget>
       </item>
@@ -64,9 +67,9 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="button_about">
+       <widget class="QPushButton" name="button_settings">
         <property name="text">
-         <string>About</string>
+         <string>Settings</string>
         </property>
        </widget>
       </item>
@@ -85,14 +88,12 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="console">
-       <attribute name="title">
-        <string>Console</string>
-       </attribute>
-      </widget>
+      <property name="tabsClosable">
+       <bool>true</bool>
+      </property>
       <widget class="QWidget" name="addconsole">
        <attribute name="title">
-        <string>+</string>
+        <string/>
        </attribute>
       </widget>
      </widget>

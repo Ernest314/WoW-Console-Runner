@@ -31,7 +31,9 @@
      <property name="font">
       <font>
        <family>Fira Code</family>
-       <pointsize>12</pointsize>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
       </font>
      </property>
      <property name="contextMenuPolicy">
@@ -90,6 +92,8 @@
        <property name="font">
         <font>
          <family>Fira Code</family>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
        </property>
        <property name="clearButtonEnabled">
