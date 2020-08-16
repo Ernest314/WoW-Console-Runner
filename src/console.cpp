@@ -132,6 +132,9 @@ void Console::stop_process()
 
 void Console::open_logs()
 {
+	// Create a new Logs folder if one doesn't already exist.
+	// If one already exists, QDir::mkpath doesn't do anything.
+	QDir().mkpath(path_logs);
 	bool is_opened = QDesktopServices::openUrl(path_logs);
 	if (!is_opened) {
 		Utils::show_warning("Could not open Logs folder.");
