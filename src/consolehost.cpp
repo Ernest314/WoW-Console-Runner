@@ -40,8 +40,7 @@ QString ConsoleHost::get_exe_name()
 	QString exe_name = "";
 	if (is_path_valid()) {
 		int i = get_path().lastIndexOf("/");
-		exe_name = get_path().mid(i);	// QString doesn't have substr
-		exe_name.remove(".exe");		// is_path_valid() guarantees this
+		exe_name = get_path().mid(i + 1);	// QString doesn't have substr
 	}
 
 	// Since this function is just looking for a textual representation
