@@ -37,7 +37,7 @@ private:
 	std::vector<QString> load_saved_paths();
 
 private slots:
-	void add_tab();
+	void add_tab(QString path="");
 	void remove_tab(int index);
 };
 

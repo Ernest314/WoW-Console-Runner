@@ -44,7 +44,7 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
-void MainWindow::add_tab()
+void MainWindow::add_tab(QString path)
 {
 	// Create a new tab with the correct children and layout,
 	// then insert a new Console into said tab.
@@ -52,7 +52,7 @@ void MainWindow::add_tab()
 	QWidget* page_new = new QWidget(this);
 	page_new->setContentsMargins(4, 4, 4, 4);
 	page_new->setLayout(new QHBoxLayout());
-	Console* console = new Console(page_new);
+	Console* console = new Console(page_new, path);
 	page_new->layout()->addWidget(console->get_ui_widget());
 
 	int tab_i = tab_count - 1;
