@@ -16,20 +16,26 @@ DEFINES += QT_DEPRECATED_WARNINGS
 RC_ICONS = rc/icon.ico
 
 SOURCES += \
+    consolehost.cpp \
+    palettes.cpp \
     utils.cpp \
     main.cpp \
     console.cpp \
     mainwindow.cpp
 
 HEADERS += \
+    consolehost.h \
+    palettes.h \
     utils.h \
     console.h \
     mainwindow.h
 
 FORMS += \
+    consolehost.ui \
     mainwindow.ui
 
 RESOURCES += \
+    fonts.qrc \
     graphics.qrc
 
 # Default rules for deployment.

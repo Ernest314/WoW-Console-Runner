@@ -5,78 +5,61 @@
 #include <QDesktopServices>
 #include <QDir>
 #include <QFile>
-#include <QMap>
 #include <QObject>
-#include <QPoint>
 #include <QProcess>
+#include <QRegularExpression>
 #include <QStandardPaths>
 #include <QString>
 #include <QTextStream>
-
-#include <QLineEdit>
-#include <QMenu>
-#include <QPlainTextEdit>
+#include <QWidget>
 
 #include <QFileDialog>
-#include <QMainWindow>
 
 #include "utils.h"
+#include "consolehost.h"
 
 class Console : public QObject
 {
 	Q_OBJECT
 
 public:
-	static const unsigned int lines_buf = 1024;
-	static const unsigned int chars_buf = 80 * lines_buf;
+	inline static const unsigned int lines_buf = 1024;
+	inline static const unsigned int chars_buf = 80 * lines_buf;
 
-	// Cannot be static, or <APPNAME> isn't registered correctly
-	const QString path_appdata =
-			QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/";
-	const QString path_saved_paths	= path_appdata + "paths.txt";
-	const QString path_logs			= path_appdata + "Logs/";
+	// Cannot be static. <APPNAME> isn't registered correctly on static init,
+	// and `QStandardPaths::AppDataLocation` is not known.
+	// TODO: see if declaring as `inline static` will allow this to work?
+	const QString path_logs =
+			QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) +
+			"/Logs/";
 
-	Console(
-			QMainWindow* parent,
-			QPlainTextEdit* console,
-			QLineEdit* lineEdit,
-			QProcess* process,
-			QString prefix_data,
-			QString prefix_logs,
-			QString name_exe );
+	Console(QWidget* parent, QString path = "");
 	~Console();
 
+	QWidget* get_ui_widget() { return host; }
+
 signals:
-	void state_changed(QProcess::ProcessState new_state);
-
-public slots:
-	void context_menu(const QPoint& pos);
-
-	void start_process();
-	void stop_process();
-	void set_exe_path();
-	void clear_buffer();
-	void open_logs();
+	void exe_updated(QString name);
 
 private:
-	QMainWindow* parent;
-	QPlainTextEdit* console;
-	QLineEdit* lineEdit;
+	inline static const QString runs_separator = "\n\n";
 
+	QWidget* parent;
+	ConsoleHost* host;
 	QProcess* process;
 	QTextStream logger;
 
-	QString prefix_data;
-	QString prefix_logs;
-	QString name_exe;
-
-	QMap<QString, QString> load_path_data(QString file);
-
-	QString load_exe_path();
-	void save_exe_path(QString path);
-
 private slots:
+	// console display
 	void pipe_output();
+
+	// executable path
+	void set_path();
+
+	// action buttons
+	void start_process();
+	void stop_process();
+	void open_logs();
 };
 
 #endif // CONSOLE_H

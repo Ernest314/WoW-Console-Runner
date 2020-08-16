@@ -6,163 +6,85 @@ MainWindow::MainWindow(QWidget *parent)
 	ui(new Ui::MainWindow)
 {
 	// Set application theme (dark theme).
-	// `QAppliction::setStyle` works, `this->setStyle` does not
+	// `QAppliction::setStyle` works, `this->setStyle` does not.
 	QApplication::setStyle(QStyleFactory::create("Fusion"));
-	QPalette palette = dark_palette();
-	QApplication::setPalette(palette);
+	QApplication::setPalette(Palettes::dark());
 	this->setStyleSheet("QToolTip { color: #d0d0d0; background-color: #3c0d56; border: 1px solid #8a5ea2; }");
-	// tooltip isn't styled by QPalette--getting overridden by something
+	// tooltip isn't styled by QPalette--getting overridden by something?
 
 	ui->setupUi(this);
 
-	// Set up console processes.
-	console_polybius = new Console(
-			this,
-			ui->console_polybius,
-			ui->lineEdit_exe_polybius,
-			new QProcess(parent),
-			"polybius",
-			"polybius-",
-			"Polybius.exe" );
-	console_irene = new Console(
-			this,
-			ui->console_irene,
-			ui->lineEdit_exe_irene,
-			new QProcess(parent),
-			"irene",
-			"irene-",
-			"Irene.exe" );
+	// Set up the last tab as a "new tab" button.
+	ui->tabWidget->setTabEnabled(0, false);
+	QPushButton* button_tab_add = new QPushButton("+", ui->tabWidget);
+	button_tab_add->setToolTip("Add Tab");
+	button_tab_add->setFixedSize(26, 22);
+	QFont font_tab_add = button_tab_add->font();
+	font_tab_add.setPointSize(14);
+	font_tab_add.setBold(true);
+	button_tab_add->setFont(font_tab_add);
+	ui->tabWidget->tabBar()->setTabButton(0, QTabBar::RightSide, button_tab_add);
+	QObject::connect(
+			button_tab_add, &QPushButton::clicked,
+			this, &MainWindow::add_tab );
 
-	// Change button state based on if processes are running.
+	// Add a default starting widget if there aren't any saved ones.
+	if (ui->tabWidget->count() == 1) {
+		add_tab();
+	}
+
+	// Set up the tab closing logic (Qt doesn't handle this by default).
 	QObject::connect(
-			console_polybius, &Console::state_changed,
-			this, &MainWindow::set_buttons_polybius);
-	QObject::connect(
-			console_irene, &Console::state_changed,
-			this, &MainWindow::set_buttons_irene);
+			ui->tabWidget, &QTabWidget::tabCloseRequested,
+			this, &MainWindow::remove_tab );
 }
 
 MainWindow::~MainWindow()
 {
-	delete console_polybius;
-	delete console_irene;
-
 	delete ui;
 }
 
-QPalette MainWindow::dark_palette()
+void MainWindow::add_tab()
 {
-	QPalette palette;
+	// Create a new tab with the correct children and layout,
+	// then insert a new Console into said tab.
+	int tab_count = ui->tabWidget->count();
+	QWidget* page_new = new QWidget(this);
+	page_new->setContentsMargins(4, 4, 4, 4);
+	page_new->setLayout(new QHBoxLayout());
+	Console* console = new Console(page_new);
+	page_new->layout()->addWidget(console->get_ui_widget());
 
-	// QPalette::Active
-	{
-		palette.setColor(QPalette::Window,			QColor( 39, 39, 39));
-		palette.setColor(QPalette::WindowText,		QColor(208,208,208));
-		palette.setColor(QPalette::Base,			QColor( 26, 26, 26));
-		palette.setColor(QPalette::AlternateBase,	QColor( 60, 13, 86));
-		palette.setColor(QPalette::ToolTipBase,		QColor( 39, 39, 39));
-		palette.setColor(QPalette::ToolTipText,		QColor(208,208,208));
-		palette.setColor(QPalette::PlaceholderText,	QColor(138, 94,162));
-		palette.setColor(QPalette::Text,			QColor(208,208,208));
-		palette.setColor(QPalette::Button,			QColor( 39, 39, 39));
-		palette.setColor(QPalette::ButtonText,		QColor(208,208,208));
-		palette.setColor(QPalette::BrightText,		QColor(138, 94,162));
+	int tab_i = tab_count - 1;
+	ui->tabWidget->insertTab(tab_i, page_new, "Console");
 
-		palette.setColor(QPalette::Light,			QColor( 26, 26, 26));
-		palette.setColor(QPalette::Midlight,		QColor( 32, 32, 32));
-		palette.setColor(QPalette::Dark,			QColor( 52, 52, 52));
-		palette.setColor(QPalette::Mid,				QColor(130,130,130));
-		palette.setColor(QPalette::Shadow,			QColor(208,208,208));
-
-		palette.setColor(QPalette::Highlight,		QColor(138, 94,162));
-		palette.setColor(QPalette::HighlightedText,	QColor( 26, 26, 26));
-
-		palette.setColor(QPalette::Link,			QColor(178, 69,102));
-		palette.setColor(QPalette::LinkVisited,		QColor( 67, 67,140));
-	}
-
-	// QPalette::Inactive
-	{
-//		palette.setColor(QPalette::Inactive, QPalette::Window,			QColor( 39, 39, 39));
-//		palette.setColor(QPalette::Inactive, QPalette::WindowText,		QColor(208,208,208));
-//		palette.setColor(QPalette::Inactive, QPalette::Base,			QColor( 26, 26, 26));
-//		palette.setColor(QPalette::Inactive, QPalette::AlternateBase,	QColor( 60, 13, 86));
-//		palette.setColor(QPalette::Inactive, QPalette::ToolTipBase,		QColor( 39, 39, 39));
-//		palette.setColor(QPalette::Inactive, QPalette::ToolTipText,		QColor(208,208,208));
-//		palette.setColor(QPalette::Inactive, QPalette::PlaceholderText,	QColor(138, 94,162));
-//		palette.setColor(QPalette::Inactive, QPalette::Text,			QColor(208,208,208));
-//		palette.setColor(QPalette::Inactive, QPalette::Button,			QColor( 39, 39, 39));
-//		palette.setColor(QPalette::Inactive, QPalette::ButtonText,		QColor(208,208,208));
-//		palette.setColor(QPalette::Inactive, QPalette::BrightText,		QColor(138, 94,162));
-
-//		palette.setColor(QPalette::Inactive, QPalette::Light,			QColor( 26, 26, 26));
-//		palette.setColor(QPalette::Inactive, QPalette::Midlight,		QColor( 32, 32, 32));
-//		palette.setColor(QPalette::Inactive, QPalette::Dark,			QColor( 52, 52, 52));
-//		palette.setColor(QPalette::Inactive, QPalette::Mid,				QColor(130,130,130));
-//		palette.setColor(QPalette::Inactive, QPalette::Shadow,			QColor(208,208,208));
-
-//		palette.setColor(QPalette::Inactive, QPalette::Highlight,		QColor(138, 94,162));
-//		palette.setColor(QPalette::Inactive, QPalette::HighlightedText,	QColor( 26, 26, 26));
-
-//		palette.setColor(QPalette::Inactive, QPalette::Link,			QColor(178, 69,102));
-//		palette.setColor(QPalette::Inactive, QPalette::LinkVisited,		QColor( 67, 67,140));
-	}
-
-	// QPalette::Disabled
-	{
-//		palette.setColor(QPalette::Disabled, QPalette::Window,			QColor( 39, 39, 39));
-		palette.setColor(QPalette::Disabled, QPalette::WindowText,		QColor( 96, 96, 96));
-//		palette.setColor(QPalette::Disabled, QPalette::Base,			QColor( 26, 26, 26));
-//		palette.setColor(QPalette::Disabled, QPalette::AlternateBase,	QColor( 60, 13, 86));
-//		palette.setColor(QPalette::Disabled, QPalette::ToolTipBase,		QColor( 39, 39, 39));
-		palette.setColor(QPalette::Disabled, QPalette::ToolTipText,		QColor( 96, 96, 96));
-//		palette.setColor(QPalette::Disabled, QPalette::PlaceholderText,	QColor(138, 94,162));
-		palette.setColor(QPalette::Disabled, QPalette::Text,			QColor( 96, 96, 96));
-//		palette.setColor(QPalette::Disabled, QPalette::Button,			QColor( 39, 39, 39));
-		palette.setColor(QPalette::Disabled, QPalette::ButtonText,		QColor( 96, 96, 96));
-		palette.setColor(QPalette::Disabled, QPalette::BrightText,		QColor(106,106,169));
-
-//		palette.setColor(QPalette::Disabled, QPalette::Light,			QColor( 26, 26, 26));
-//		palette.setColor(QPalette::Disabled, QPalette::Midlight,		QColor( 32, 32, 32));
-//		palette.setColor(QPalette::Disabled, QPalette::Dark,			QColor( 52, 52, 52));
-//		palette.setColor(QPalette::Disabled, QPalette::Mid,				QColor(130,130,130));
-//		palette.setColor(QPalette::Disabled, QPalette::Shadow,			QColor(208,208,208));
-
-//		palette.setColor(QPalette::Disabled, QPalette::Highlight,		QColor(138, 94,162));
-//		palette.setColor(QPalette::Disabled, QPalette::HighlightedText,	QColor( 26, 26, 26));
-
-//		palette.setColor(QPalette::Disabled, QPalette::Link,			QColor(178, 69,102));
-//		palette.setColor(QPalette::Disabled, QPalette::LinkVisited,		QColor( 67, 67,140));
-	}
-
-	return palette;
+	// Set up the new tab to update its text from its child Console.
+	ui->tabWidget->setCurrentIndex(tab_i);
+	QObject::connect(
+			console, &Console::exe_updated,
+			this, [=](QString name) {
+				for (int i=0; i<ui->tabWidget->count()-1; i++) {
+					if (ui->tabWidget->widget(i) == page_new) {
+						ui->tabWidget->setTabText(i, name);
+						break;
+					}
+				}
+			} );
 }
 
-void MainWindow::set_buttons_polybius(QProcess::ProcessState state)
+void MainWindow::remove_tab(int index)
 {
-	switch (state) {
-	case QProcess::Starting : break;	// don't care about this
-	case QProcess::Running :
-		ui->button_stop_polybius->setEnabled(true);
-		ui->button_run_polybius->setText("Restart");
-		break;
-	case QProcess::NotRunning :
-		ui->button_stop_polybius->setEnabled(false);
-		ui->button_run_polybius->setText("Run");
-		break;
+	ui->tabWidget->removeTab(index);
+
+	// Always make sure there's at least one blank console tab;
+	// this also prevents the disabled "new tab" tab from showing.
+	if (ui->tabWidget->count() == 1) {
+		add_tab();
 	}
-}
-void MainWindow::set_buttons_irene(QProcess::ProcessState state)
-{
-	switch (state) {
-	case QProcess::Starting : break;	// don't care about this
-	case QProcess::Running :
-		ui->button_stop_irene->setEnabled(true);
-		ui->button_run_irene->setText("Restart");
-		break;
-	case QProcess::NotRunning :
-		ui->button_stop_irene->setEnabled(false);
-		ui->button_run_irene->setText("Run");
-		break;
+
+	// Make sure "New Tab" tab isn't showing.
+	int i_new = ui->tabWidget->count() - 1;
+	if (ui->tabWidget->currentIndex() == i_new) {
+		ui->tabWidget->setCurrentIndex(i_new - 1);
 	}
 }
