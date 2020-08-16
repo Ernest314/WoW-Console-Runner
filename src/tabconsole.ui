@@ -30,7 +30,7 @@
     <widget class="QPlainTextEdit" name="console">
      <property name="font">
       <font>
-       <family>Consolas</family>
+       <family>Fira Code</family>
        <pointsize>12</pointsize>
       </font>
      </property>
@@ -86,7 +86,13 @@
       </spacer>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_path"/>
+      <widget class="QLineEdit" name="lineEdit_path">
+       <property name="font">
+        <font>
+         <family>Fira Code</family>
+        </font>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="button_path_set">
