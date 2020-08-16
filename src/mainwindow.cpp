@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
 	// Set up the last tab as a "new tab" button.
 	ui->tabWidget->setTabEnabled(0, false);
 	QPushButton* button_tab_add = new QPushButton("+", ui->tabWidget);
+	button_tab_add->setToolTip("Add Tab");
 	button_tab_add->setFixedSize(26, 22);
 	QFont font_tab_add = button_tab_add->font();
 	font_tab_add.setPointSize(14);
@@ -45,7 +46,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::add_tab()
 {
-
+	// Create a new tab with the correct children and layout,
+	// then insert a new Console into said tab.
 	int tab_count = ui->tabWidget->count();
 	QWidget* page_new = new QWidget(this);
 	page_new->setContentsMargins(4, 4, 4, 4);
@@ -55,6 +57,8 @@ void MainWindow::add_tab()
 
 	int tab_i = tab_count - 1;
 	ui->tabWidget->insertTab(tab_i, page_new, "Console");
+
+	// Set up the new tab to update its text from its child Console.
 	ui->tabWidget->setCurrentIndex(tab_i);
 	QObject::connect(
 			console, &Console::exe_updated,
@@ -71,9 +75,16 @@ void MainWindow::add_tab()
 void MainWindow::remove_tab(int index)
 {
 	ui->tabWidget->removeTab(index);
+
 	// Always make sure there's at least one blank console tab;
 	// this also prevents the disabled "new tab" tab from showing.
 	if (ui->tabWidget->count() == 1) {
 		add_tab();
+	}
+
+	// Make sure "New Tab" tab isn't showing.
+	int i_new = ui->tabWidget->count() - 1;
+	if (ui->tabWidget->currentIndex() == i_new) {
+		ui->tabWidget->setCurrentIndex(i_new - 1);
 	}
 }
