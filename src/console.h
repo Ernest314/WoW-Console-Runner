@@ -11,9 +11,9 @@
 #include <QStandardPaths>
 #include <QString>
 #include <QTextStream>
+#include <QWidget>
 
 #include <QFileDialog>
-#include <QMainWindow>
 
 #include "utils.h"
 #include "consolehost.h"
@@ -33,8 +33,10 @@ public:
 			QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) +
 			"/Logs/";
 
-	Console(QMainWindow* parent, QString path = "");
+	Console(QWidget* parent, QString path = "");
 	~Console();
+
+	QWidget* get_ui_widget() { return host; }
 
 signals:
 	void exe_updated(QString name);
@@ -42,7 +44,7 @@ signals:
 private:
 	inline static const QString runs_separator = "\n\n";
 
-	QMainWindow* parent;
+	QWidget* parent;
 	ConsoleHost* host;
 	QProcess* process;
 	QTextStream logger;

@@ -1,8 +1,8 @@
 #include "console.h"
 
-Console::Console(QMainWindow* parent, QString path) :
+Console::Console(QWidget* parent, QString path) :
 	parent(parent),
-	host(new ConsoleHost()),
+	host(new ConsoleHost(parent)),
 	process(new QProcess()),
 	logger(QTextStream())
 {
