@@ -13,14 +13,13 @@
 #include <QString>
 #include <QTextStream>
 
-#include <QLineEdit>
 #include <QMenu>
-#include <QPlainTextEdit>
 
 #include <QFileDialog>
 #include <QMainWindow>
 
 #include "utils.h"
+#include "tabconsole.h"
 
 class Console : public QObject
 {
@@ -38,8 +37,6 @@ public:
 
 	Console(
 			QMainWindow* parent,
-			QPlainTextEdit* console,
-			QLineEdit* lineEdit,
 			QProcess* process,
 			QString prefix_data,
 			QString prefix_logs,
@@ -54,14 +51,13 @@ public slots:
 
 	void start_process();
 	void stop_process();
-	void set_exe_path();
+	void set_path();
 	void clear_buffer();
 	void open_logs();
 
 private:
 	QMainWindow* parent;
-	QPlainTextEdit* console;
-	QLineEdit* lineEdit;
+	TabConsole* host;
 
 	QProcess* process;
 	QTextStream logger;

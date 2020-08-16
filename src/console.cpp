@@ -2,15 +2,11 @@
 
 Console::Console(
 		QMainWindow* parent,
-		QPlainTextEdit* console,
-		QLineEdit* lineEdit,
 		QProcess* process,
 		QString prefix_data,
 		QString prefix_logs,
 		QString name_exe) :
 	parent(parent),
-	console(console),
-	lineEdit(lineEdit),
 	process(process),
 	logger(QTextStream()),
 	prefix_data(prefix_data),
@@ -29,24 +25,25 @@ Console::Console(
 
 	// Grab context menu event on consoles (to add "clear" option).
 	QObject::connect(
-			console, &QPlainTextEdit::customContextMenuRequested,
+			host->ui->console, &QPlainTextEdit::customContextMenuRequested,
 			this, &Console::context_menu );
 
 	// Initialize lineEdit text with the paths to their
 	// corresponding .exe files.
-	lineEdit->setText(load_exe_path());
+	host->ui->lineEdit_path->setText(load_exe_path());
 }
 
 Console::~Console()
 {
+	delete host;
 	delete process;
 }
 
 void Console::context_menu(const QPoint& pos)
 {
-	QMenu* menu = console->createStandardContextMenu(pos);
+	QMenu* menu = host->ui->console->createStandardContextMenu(pos);
 	menu->addAction("Clea&r", this, &Console::clear_buffer);
-	menu->exec(console->mapToGlobal(pos));
+	menu->exec(host->ui->console->mapToGlobal(pos));
 	delete menu;
 }
 
@@ -57,7 +54,7 @@ void Console::start_process()
 	clear_buffer();
 
 	// Don't try to start if process isn't runnable.
-	QString path = lineEdit->text();
+	QString path = host->ui->lineEdit_path->text();
 	bool is_runnable = QFile::exists(path) && path.endsWith(".exe");
 	if (!is_runnable) {
 		Utils::show_warning("There is no valid executable specified.");
@@ -92,7 +89,7 @@ void Console::stop_process()
 	process->close();
 }
 
-void Console::set_exe_path()
+void Console::set_path()
 {
 	// requiring *.exe is the most validation possible here,
 	// without explicitly hooking into polybius.exe
@@ -102,12 +99,12 @@ void Console::set_exe_path()
 				name_exe + " path",
 				QDir::homePath(),
 				"Executable (*.exe)" );
-	if (path != nullptr) lineEdit->setText(path);
+	if (path != nullptr) host->ui->lineEdit_path->setText(path);
 }
 
 void Console::clear_buffer()
 {
-	console->setPlainText("");
+	host->ui->console->setPlainText("");
 }
 
 void Console::open_logs()
@@ -195,11 +192,11 @@ void Console::pipe_output()
 
 		// Clear the oldest half of the buffer (to the nearest line),
 		// then update console display.
-		QString buffer = console->toPlainText();
+		QString buffer = host->ui->console->toPlainText();
 		if (static_cast<unsigned int>(buffer.size()) > chars_buf) {
 			int cutoff = buffer.indexOf("\n", chars_buf/2);
 			buffer = buffer.remove(0, cutoff + 1);
 		}
-		console->setPlainText(buffer + line);
+		host->ui->console->setPlainText(buffer + line);
 	}
 }
