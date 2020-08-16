@@ -11,6 +11,7 @@
 
 #include "utils.h"
 #include "console.h"
+#include "palettes.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -28,7 +29,7 @@ private:
 	Ui::MainWindow* ui;
 	std::vector<Console*> consoles;
 
-	static QPalette dark_palette();
+	std::vector<QString> load_saved_paths();
 	static void load_saved_data();
 };
 

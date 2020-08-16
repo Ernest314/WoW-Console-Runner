@@ -17,6 +17,7 @@ RC_ICONS = rc/icon.ico
 
 SOURCES += \
     consolehost.cpp \
+    palettes.cpp \
     utils.cpp \
     main.cpp \
     console.cpp \
@@ -24,6 +25,7 @@ SOURCES += \
 
 HEADERS += \
     consolehost.h \
+    palettes.h \
     utils.h \
     console.h \
     mainwindow.h
