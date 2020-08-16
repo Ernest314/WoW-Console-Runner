@@ -15,37 +15,30 @@ MainWindow::MainWindow(QWidget *parent)
 
 	ui->setupUi(this);
 
-	// Set up console processes.
-	console_polybius = new Console(
-			this,
-			ui->console_polybius,
-			ui->lineEdit_exe_polybius,
-			new QProcess(parent),
-			"polybius",
-			"polybius-",
-			"Polybius.exe" );
-	console_irene = new Console(
-			this,
-			ui->console_irene,
-			ui->lineEdit_exe_irene,
-			new QProcess(parent),
-			"irene",
-			"irene-",
-			"Irene.exe" );
-
-	// Change button state based on if processes are running.
-	QObject::connect(
-			console_polybius, &Console::state_changed,
-			this, &MainWindow::set_buttons_polybius);
-	QObject::connect(
-			console_irene, &Console::state_changed,
-			this, &MainWindow::set_buttons_irene);
+//	// Set up console processes.
+//	console_polybius = new Console(
+//			this,
+//			ui->console_polybius,
+//			ui->lineEdit_exe_polybius,
+//			new QProcess(parent),
+//			"polybius",
+//			"polybius-",
+//			"Polybius.exe" );
+//	console_irene = new Console(
+//			this,
+//			ui->console_irene,
+//			ui->lineEdit_exe_irene,
+//			new QProcess(parent),
+//			"irene",
+//			"irene-",
+//			"Irene.exe" );
 }
 
 MainWindow::~MainWindow()
 {
-	delete console_polybius;
-	delete console_irene;
+	for (Console* console : consoles) {
+		delete console;
+	}
 
 	delete ui;
 }
@@ -136,33 +129,4 @@ QPalette MainWindow::dark_palette()
 	}
 
 	return palette;
-}
-
-void MainWindow::set_buttons_polybius(QProcess::ProcessState state)
-{
-	switch (state) {
-	case QProcess::Starting : break;	// don't care about this
-	case QProcess::Running :
-		ui->button_stop_polybius->setEnabled(true);
-		ui->button_run_polybius->setText("Restart");
-		break;
-	case QProcess::NotRunning :
-		ui->button_stop_polybius->setEnabled(false);
-		ui->button_run_polybius->setText("Run");
-		break;
-	}
-}
-void MainWindow::set_buttons_irene(QProcess::ProcessState state)
-{
-	switch (state) {
-	case QProcess::Starting : break;	// don't care about this
-	case QProcess::Running :
-		ui->button_stop_irene->setEnabled(true);
-		ui->button_run_irene->setText("Restart");
-		break;
-	case QProcess::NotRunning :
-		ui->button_stop_irene->setEnabled(false);
-		ui->button_run_irene->setText("Run");
-		break;
-	}
 }
