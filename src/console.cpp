@@ -183,18 +183,20 @@ void Console::pipe_output()
 {
 	while (process->canReadLine()) {
 		QString line = process->readLine();
-		line.remove("\r");
+		// Console output line endings will naïvely render as doubled.
+		// Remove one: QPlainTextEdit only needs LF, not CR LF / LF CR.
+		line.replace(QRegularExpression("\r\n|\n\r"), "\n");
 
 		// Log timestamped console output.
 		QString date = QDateTime::currentDateTime().toString(Qt::ISODate);
 		logger << date << "> " << line;
 		logger.flush();	// write to file as soon as possible
 
-		// Clear the oldest half of the buffer (to the nearest line),
-		// then update console display.
+		// When buffer fills up, clear the oldest half. (then,)
+		// Update console display.
 		QString buffer = host->ui->console->toPlainText();
 		if (static_cast<unsigned int>(buffer.size()) > chars_buf) {
-			int cutoff = buffer.indexOf("\n", chars_buf/2);
+			int cutoff = buffer.indexOf("\n", lines_buf/2);
 			buffer = buffer.remove(0, cutoff + 1);
 		}
 		host->ui->console->setPlainText(buffer + line);

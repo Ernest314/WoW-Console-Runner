@@ -9,6 +9,7 @@
 #include <QObject>
 #include <QPoint>
 #include <QProcess>
+#include <QRegularExpression>
 #include <QStandardPaths>
 #include <QString>
 #include <QTextStream>
