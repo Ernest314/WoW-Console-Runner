@@ -48,7 +48,7 @@ QString ConsoleHost::get_exe_name()
 	// Since this function is just looking for a textual representation
 	// of the .exe file, if one isn't found, placeholder text makes sense
 	// (instead of returning null).
-	if (exe_name == "") exe_name = "UNKNOWN";
+	if (exe_name == "") exe_name = "Console";
 	return exe_name;
 }
 
