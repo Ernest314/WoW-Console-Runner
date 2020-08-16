@@ -1,31 +1,31 @@
-#include "tabconsole.h"
-#include "ui_tabconsole.h"
+#include "consolehost.h"
+#include "ui_consolehost.h"
 
-TabConsole::TabConsole(QWidget *parent) :
+ConsoleHost::ConsoleHost(QWidget *parent) :
 	QWidget(parent),
-	ui(new Ui::TabConsole)
+	ui(new Ui::ConsoleHost)
 {
 	ui->setupUi(this);
 
 	// Grab context menu event to add "clear" option.
 	QObject::connect(
 			ui->console, &QPlainTextEdit::customContextMenuRequested,
-			this, &TabConsole::context_menu );
+			this, &ConsoleHost::context_menu );
 
 	// Validate line edit's path every time it's updated.
 	// This is important because the line edit's path is the authoritative
 	// source of what executable is being run in the console.
 	QObject::connect(
 			ui->lineEdit_path, &QLineEdit::editingFinished,
-			this, &TabConsole::validate_path );
+			this, &ConsoleHost::validate_path );
 }
 
-TabConsole::~TabConsole()
+ConsoleHost::~ConsoleHost()
 {
 	delete ui;
 }
 
-bool TabConsole::is_path_valid()
+bool ConsoleHost::is_path_valid()
 {
 	QDir path_check = QDir(get_path());
 	// QDir::exists only checks for files if absolute path is given
@@ -35,7 +35,7 @@ bool TabConsole::is_path_valid()
 		return false;
 }
 
-QString TabConsole::get_exe_name()
+QString ConsoleHost::get_exe_name()
 {
 	QString exe_name = "";
 	if (is_path_valid()) {
@@ -51,7 +51,7 @@ QString TabConsole::get_exe_name()
 	return exe_name;
 }
 
-void TabConsole::validate_path()
+void ConsoleHost::validate_path()
 {
 	// don't highlight text box if empty
 	if (is_path_valid() || get_path() == "") {
@@ -63,7 +63,7 @@ void TabConsole::validate_path()
 	}
 }
 
-void TabConsole::update_buttons(QProcess::ProcessState state)
+void ConsoleHost::update_buttons(QProcess::ProcessState state)
 {
 	switch (state) {
 	case QProcess::Starting : break;	// don't care about this
@@ -79,12 +79,12 @@ void TabConsole::update_buttons(QProcess::ProcessState state)
 	}
 }
 
-void TabConsole::context_menu(const QPoint& pos)
+void ConsoleHost::context_menu(const QPoint& pos)
 {
 	// Take standard (QPlainTextEdit) context menu, and return the same
 	// menu but with additional items inserted.
 	QMenu* menu = ui->console->createStandardContextMenu(pos);
-	menu->addAction("Clea&r", this, &TabConsole::clear_buffer);
+	menu->addAction("Clea&r", this, &ConsoleHost::clear_buffer);
 	menu->exec(ui->console->mapToGlobal(pos));
 	delete menu;
 }

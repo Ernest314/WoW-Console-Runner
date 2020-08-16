@@ -8,21 +8,21 @@
 #include <QString>
 #include <QWidget>
 
-#include "ui_tabconsole.h"
+#include "ui_consolehost.h"
 
 namespace Ui {
-class TabConsole;
+class ConsoleHost;
 }
 
-class TabConsole : public QWidget
+class ConsoleHost : public QWidget
 {
 	Q_OBJECT
 
 public:
-	Ui::TabConsole* ui;
+	Ui::ConsoleHost* ui;
 
-	explicit TabConsole(QWidget *parent = nullptr);
-	~TabConsole();
+	explicit ConsoleHost(QWidget *parent = nullptr);
+	~ConsoleHost();
 
 	bool is_path_valid();
 	QString get_path()	{ return ui->lineEdit_path->text(); }

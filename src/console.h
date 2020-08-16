@@ -16,7 +16,7 @@
 #include <QMainWindow>
 
 #include "utils.h"
-#include "tabconsole.h"
+#include "consolehost.h"
 
 class Console : public QObject
 {
@@ -40,7 +40,7 @@ private:
 	inline static const QString runs_separator = "\n\n";
 
 	QMainWindow* parent;
-	TabConsole* host;
+	ConsoleHost* host;
 	QProcess* process;
 	QTextStream logger;
 

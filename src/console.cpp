@@ -2,7 +2,7 @@
 
 Console::Console(QMainWindow* parent, QString path) :
 	parent(parent),
-	host(new TabConsole()),
+	host(new ConsoleHost()),
 	process(new QProcess()),
 	logger(QTextStream())
 {
@@ -22,7 +22,7 @@ Console::Console(QMainWindow* parent, QString path) :
 	// Change button states based on whether process is running.
 	QObject::connect(
 			process, &QProcess::stateChanged,
-			host, &TabConsole::update_buttons );
+			host, &ConsoleHost::update_buttons );
 
 	// Hook up UI buttons to functionality.
 	QObject::connect(
