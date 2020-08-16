@@ -1,6 +1,7 @@
 #ifndef TABCONSOLE_H
 #define TABCONSOLE_H
 
+#include <QMenu>
 #include <QPlainTextEdit>
 #include <QWidget>
 
@@ -19,6 +20,12 @@ public:
 
 	explicit TabConsole(QWidget *parent = nullptr);
 	~TabConsole();
+
+public slots:
+	void clear_buffer();
+
+private slots:
+	void context_menu(const QPoint& pos);
 };
 
 #endif // TABCONSOLE_H
