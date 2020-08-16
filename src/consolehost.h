@@ -28,6 +28,9 @@ public:
 	QString get_path()	{ return ui->lineEdit_path->text(); }
 	QString get_exe_name();
 
+signals:
+	void exe_updated(QString name);
+
 public slots:
 	void clear_buffer() { ui->console->setPlainText(""); }
 	void validate_path();
@@ -36,8 +39,8 @@ public slots:
 private:
 	inline static const QString invalid_path_stylesheet =
 			"QLineEdit {"
-			"color: white;"
-			"background-color: orangered;"
+			"color: darkred;"
+			"background-color: pink;"
 			"}" ;
 
 private slots:

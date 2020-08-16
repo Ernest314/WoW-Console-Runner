@@ -52,13 +52,21 @@ QString ConsoleHost::get_exe_name()
 
 void ConsoleHost::validate_path()
 {
+	bool is_path_valid = this->is_path_valid();
 	// don't highlight text box if empty
-	if (is_path_valid() || get_path() == "") {
+	if (is_path_valid || get_path() == "") {
 		// reset stylesheet
 		ui->lineEdit_path->setStyleSheet("");
 	} else {
 		// highlight text
 		ui->lineEdit_path->setStyleSheet(invalid_path_stylesheet);
+	}
+
+	// update "name" of ConsoleHost
+	if (is_path_valid) {
+		emit exe_updated(get_exe_name());
+	} else if (get_path() == "") {
+		emit exe_updated("Console");
 	}
 }
 

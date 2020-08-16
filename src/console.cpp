@@ -19,6 +19,11 @@ Console::Console(QMainWindow* parent, QString path) :
 			host->ui->button_path_set, &QPushButton::clicked,
 			this, &Console::set_path);
 
+	// Connect the exe name updated signals.
+	QObject::connect(
+			host, &ConsoleHost::exe_updated,
+			this, &Console::exe_updated );
+
 	// Change button states based on whether process is running.
 	QObject::connect(
 			process, &QProcess::stateChanged,

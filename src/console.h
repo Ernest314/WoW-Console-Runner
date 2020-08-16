@@ -36,6 +36,9 @@ public:
 	Console(QMainWindow* parent, QString path = "");
 	~Console();
 
+signals:
+	void exe_updated(QString name);
+
 private:
 	inline static const QString runs_separator = "\n\n";
 
