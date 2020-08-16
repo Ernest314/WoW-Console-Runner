@@ -1,9 +1,15 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QFont>
+#include <QHBoxLayout>
 #include <QPalette>
 #include <QProcess>
+#include <QPushButton>
 #include <QStyleFactory>
+#include <QTabBar>
+#include <QTabWidget>
+#include <QWidget>
 
 #include <QMainWindow>
 
@@ -27,10 +33,12 @@ public:
 
 private:
 	Ui::MainWindow* ui;
-	std::vector<Console*> consoles;
 
 	std::vector<QString> load_saved_paths();
-	static void load_saved_data();
+
+private slots:
+	void add_tab();
+	void remove_tab(int index);
 };
 
 #endif // MAINWINDOW_H
