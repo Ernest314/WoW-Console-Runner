@@ -36,7 +36,8 @@ public:
 	Console(QWidget* parent, QString path = "");
 	~Console();
 
-	QWidget* get_ui_widget() { return host; }
+	ConsoleHost* get_host() { return host; }
+	QString get_path() { return host->get_path(); }
 
 signals:
 	void exe_updated(QString name);

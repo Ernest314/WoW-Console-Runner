@@ -16,7 +16,7 @@ ConsoleHost::ConsoleHost(QWidget *parent) :
 	// This is important because the line edit's path is the authoritative
 	// source of what executable is being run in the console.
 	QObject::connect(
-			ui->lineEdit_path, &QLineEdit::editingFinished,
+			ui->lineEdit_path, &QLineEdit::textChanged,
 			this, &ConsoleHost::validate_path );
 }
 
@@ -27,9 +27,11 @@ ConsoleHost::~ConsoleHost()
 
 bool ConsoleHost::is_path_valid()
 {
-	QDir path_check = QDir(get_path());
-	// QDir::exists only checks for files if absolute path is given
-	if (path_check.exists(get_path()) && get_path().endsWith(".exe"))
+	QString path = get_path();
+	// QDir::exists only checks for files if absolute path is given.
+	// Starting with endsWith() because it's cheaper, so it's better to
+	// short-circuit the other half of the expression.
+	if (path.endsWith(".exe") && QDir().exists(path) )
 		return true;
 	else
 		return false;
@@ -46,7 +48,7 @@ QString ConsoleHost::get_exe_name()
 	// Since this function is just looking for a textual representation
 	// of the .exe file, if one isn't found, placeholder text makes sense
 	// (instead of returning null).
-	if (exe_name == "") exe_name = "UNKNOWN";
+	if (exe_name == "") exe_name = "Console";
 	return exe_name;
 }
 
