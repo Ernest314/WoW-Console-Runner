@@ -1,5 +1,3 @@
-Unicode true
-
 !define VERSION "v3.0"
 !define NAME_LOWER "wow-console-runner"
 !define NAME_UPPER "WoW-Console-Runner"
@@ -13,6 +11,8 @@ Unicode true
 ;= General Settings =;
 ;====================;
 ; Some of these aren't necessarily MUI-specific.
+Unicode true
+BrandingText "Erythro + NSIS 3"
 Name "${NAME_SPACE}"
 OutFile "${NAME_UPPER}-win32.exe"
 RequestExecutionLevel admin ; For writing to start menu & Program Files
