@@ -37,6 +37,7 @@ public slots:
 	void update_buttons(QProcess::ProcessState state);
 
 private:
+	inline static const QString empty_console_name = "Console";
 	inline static const QString invalid_path_stylesheet =
 			"QLineEdit {"
 			"color: darkred;"

@@ -8,6 +8,7 @@
 #include <QObject>
 #include <QProcess>
 #include <QRegularExpression>
+#include <QScrollBar>
 #include <QStandardPaths>
 #include <QString>
 #include <QTextStream>

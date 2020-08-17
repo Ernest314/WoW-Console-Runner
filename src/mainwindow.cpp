@@ -93,7 +93,7 @@ void MainWindow::add_tab(QString path)
 	page_new->layout()->addWidget(console->get_host());
 
 	int tab_i = tab_count - 1;
-	ui->tabWidget->insertTab(tab_i, page_new, "Console");
+	ui->tabWidget->insertTab(tab_i, page_new, "");
 	consoles.insert({page_new, console});
 
 	// Set up the new tab to update its text from its child Console,
