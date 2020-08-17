@@ -68,6 +68,10 @@ void Console::pipe_output()
 			buffer = buffer.remove(0, cutoff + 1);
 		}
 		host->ui->console->setPlainText(buffer + line);
+
+		// Scroll to bottom. (Otherwise ends at top.)
+		QScrollBar* scroll = host->ui->console->verticalScrollBar();
+		scroll->setValue(scroll->maximum());
 	}
 }
 
