@@ -29,7 +29,6 @@ public:
 
 	// Cannot be static. <APPNAME> isn't registered correctly on static init,
 	// and `QStandardPaths::AppDataLocation` is not known.
-	// TODO: see if declaring as `inline static` will allow this to work?
 	const QString path_logs =
 			QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) +
 			"/Logs/";
