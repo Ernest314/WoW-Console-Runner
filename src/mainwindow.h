@@ -17,6 +17,7 @@
 #include <QMainWindow>
 
 #include <unordered_map>
+#include <utility>	// std::pair
 #include <vector>
 
 #include "utils.h"

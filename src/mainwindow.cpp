@@ -57,6 +57,9 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+	for (std::pair<QWidget*, Console*> console : consoles) {
+		delete console.second;
+	}
 	delete ui;
 }
 
