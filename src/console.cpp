@@ -44,6 +44,7 @@ Console::Console(QWidget* parent, QString path) :
 Console::~Console()
 {
 	delete host;
+	stop_process();
 	delete process;
 }
 
